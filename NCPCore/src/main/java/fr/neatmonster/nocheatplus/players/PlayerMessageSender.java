@@ -24,7 +24,7 @@ public class PlayerMessageSender extends OnDemandTickListener {
     }
 
     /** Queued entries, also used as lock. */
-    private List<MessageEntry> messageEntries = new LinkedList<MessageEntry>();
+    private List<MessageEntry> messageEntries = new LinkedList<>();
 
     @Override
     public boolean delegateTick(int tick, long timeLast) {
@@ -38,7 +38,7 @@ public class PlayerMessageSender extends OnDemandTickListener {
                 return true;
             }
             entries = messageEntries;
-            messageEntries = new LinkedList<PlayerMessageSender.MessageEntry>();
+            messageEntries = new LinkedList<>();
         }
         // Do messaging.
         for (final MessageEntry entry : entries){

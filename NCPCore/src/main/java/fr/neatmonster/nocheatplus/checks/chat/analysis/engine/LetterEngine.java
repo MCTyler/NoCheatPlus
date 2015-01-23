@@ -80,7 +80,6 @@ public class LetterEngine implements IRemoveData, IHaveCheckType, ConsistencyChe
 				catch( final Exception e){
 					StaticLog.logSevere("[NoCheatPlus] chat.text: processor("+processor.getProcessorName()+") generated an exception: " + e.getClass().getSimpleName() + ": " + e.getMessage());
 					StaticLog.logSevere(e);
-					continue;
 				}
 			}
 		}
@@ -95,7 +94,6 @@ public class LetterEngine implements IRemoveData, IHaveCheckType, ConsistencyChe
 				catch( final Exception e){
 					StaticLog.logSevere("[NoCheatPlus] chat.text: processor("+processor.getProcessorName()+") generated an exception: " + e.getClass().getSimpleName() + ": " + e.getMessage());
 					StaticLog.logSevere(e);
-					continue;
 				}
 			}
 		}

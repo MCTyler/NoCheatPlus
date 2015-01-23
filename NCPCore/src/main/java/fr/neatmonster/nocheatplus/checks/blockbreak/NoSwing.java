@@ -22,6 +22,7 @@ public class NoSwing extends Check {
      * 
      * @param player
      *            the player
+     * @param data
      * @return true, if successful
      */
     public boolean check(final Player player, final BlockBreakData data) {

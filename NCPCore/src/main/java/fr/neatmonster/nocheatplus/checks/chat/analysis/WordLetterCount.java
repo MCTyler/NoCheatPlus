@@ -18,7 +18,9 @@ public final class WordLetterCount{
 		char[] a = word.toCharArray();
 		// Preserve insertion order.
 		counts = new LinkedHashMap<Character, Integer>(a.length);
+                @SuppressWarnings("LocalVariableHidesMemberVariable")
 		int upperCase = 0;
+                @SuppressWarnings("LocalVariableHidesMemberVariable")
 		int notLetter = 0;
 		for (int i = 0; i < a.length; i++){
 			final char c = a[i];
@@ -31,7 +33,7 @@ public final class WordLetterCount{
 			else key = c;
 			final Integer count = counts.remove(key);
 			if (count == null) counts.put(key,  1);
-			else counts.put(key, count.intValue() + 1);
+			else counts.put(key, count + 1);
 			
 		}
 		this.notLetter = notLetter;

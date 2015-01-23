@@ -82,7 +82,6 @@ public class RawConfigFile  extends YamlConfiguration{
     /**
      * Return a double value within given bounds, with preset.
      * 
-     * @param data
      * @param path
      * @param min
      * @param max
@@ -99,7 +98,6 @@ public class RawConfigFile  extends YamlConfiguration{
     /**
      * Return a long value within given bounds, with preset.
      * 
-     * @param data
      * @param path
      * @param min
      * @param max
@@ -116,7 +114,6 @@ public class RawConfigFile  extends YamlConfiguration{
     /**
      * Return an int value within given bounds, with preset.
      * 
-     * @param data
      * @param path
      * @param min
      * @param max
@@ -215,9 +212,10 @@ public class RawConfigFile  extends YamlConfiguration{
             Field op;
             op = YamlConfiguration.class.getDeclaredField("yamlOptions");
             op.setAccessible(true);
+            @SuppressWarnings("LocalVariableHidesMemberVariable")
             final DumperOptions options = (DumperOptions) op.get(this);
             options.setWidth(200);
-        } catch (final Exception e) {}
+        } catch (final NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {}
 
         return super.saveToString();
     }

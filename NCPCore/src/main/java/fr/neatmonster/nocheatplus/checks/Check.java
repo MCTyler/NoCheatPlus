@@ -16,6 +16,7 @@ import fr.neatmonster.nocheatplus.hooks.NCPHookManager;
 import fr.neatmonster.nocheatplus.players.DataManager;
 import fr.neatmonster.nocheatplus.players.ExecutionHistory;
 import fr.neatmonster.nocheatplus.utilities.TickTask;
+import java.util.EnumMap;
 
 /**
  * The parent class of all checks. Don't let this implement Listener without knowing that this might be registered as component with NCP before the check-listeners.
@@ -64,8 +65,8 @@ public abstract class Check implements MCAccessHolder{
      * 
      * @param player
      *            the player
-     * @param VL
-     *            the vL
+     * @param vL
+     * @param addedVL
      * @param actions
      *            the actions
      * @param isMainThread
@@ -141,11 +142,11 @@ public abstract class Check implements MCAccessHolder{
      * Fill in parameters for creating violation data. 
      * Individual checks should override this to fill in check specific parameters,
      * which then are fetched by the violation data instance.
-     * @param player
+     * @param violationData
      * @return
      */
     protected Map<ParameterName, String> getParameterMap(final ViolationData violationData) {
-        final Map<ParameterName, String> params = new HashMap<ParameterName, String>();
+        final Map<ParameterName, String> params = new EnumMap<ParameterName, String>(ParameterName.class);
         // (Standard parameters like player, vl, check name are filled in in ViolationData.getParameter!)
         return params;
     }

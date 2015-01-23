@@ -25,6 +25,7 @@ public class GodMode extends Check {
      * New style god mode check. Much more sensitive.
      * @param player
      * @param damage
+     * @param data
      * @return
      */
     public boolean check(final Player player, final double damage, final FightData data){
@@ -143,15 +144,13 @@ public class GodMode extends Check {
     	// Violation probably.
     	data.godModeAcc += delta;
     	
+            @SuppressWarnings("UnusedAssignment")
     	boolean cancel = false;
     	// TODO: bounds
     	if (data.godModeAcc > 2){
     		// TODO: To match with old checks vls / actions, either change actions or apply a factor.
     		data.godModeVL += delta;
-    		if (executeActions(player, data.godModeVL, delta, FightConfig.getConfig(player).godModeActions)){
-    			cancel = true;
-    		}
-    		else cancel = false;
+                cancel = executeActions(player, data.godModeVL, delta, FightConfig.getConfig(player).godModeActions);
     	}
     	else{
     		cancel = false;

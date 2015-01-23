@@ -325,6 +325,7 @@ public class TrigUtil {
      * @param targetZ
      * @return  Positive angle between vector from source to target and the vector for the given direction [0...PI].
      */
+    @SuppressWarnings("UnusedAssignment")
     public static float angle(final double sourceX, final double sourceY, final double sourceZ, final double dirX, final double dirY, final double dirZ, final double targetX, final double targetY, final double targetZ) {
         double dirLength = Math.sqrt(dirX * dirX + dirY * dirY + dirZ * dirZ);
         if (dirLength == 0.0) dirLength = 1.0; // ...
@@ -414,6 +415,7 @@ public class TrigUtil {
         return manhattan(x1, y1, z1, block.getX(), block.getY(), block.getZ());
     }
 
+    @SuppressWarnings("InfiniteRecursion")
     public static double manhattan(final double x1,final double  z1, final double x2, final double z2){
         return manhattan(Location.locToBlock(x1), Location.locToBlock(z1), Location.locToBlock(x2), Location.locToBlock(z2));
     }

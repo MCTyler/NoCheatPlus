@@ -54,6 +54,7 @@ public class CheckListener extends NCPListener implements MCAccessHolder, IHoldS
 	/**
 	 * Convenience method to add checks as components to NCP with a delay (IHoldSubComponent).
 	 * This should not be used after having added the check to the ComponentRegistry (NCP-API).
+         * @param <C>
 	 * @param check
 	 * @return The given Check instance, for chaining.
 	 */

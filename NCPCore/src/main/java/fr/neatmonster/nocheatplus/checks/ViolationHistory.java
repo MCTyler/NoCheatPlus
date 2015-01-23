@@ -304,8 +304,7 @@ public class ViolationHistory {
      * @return ViolationLevel instance, if present. Otherwise null.
      */
     public ViolationLevel getViolationLevel(final CheckType type) {
-        for (int i = 0; i < violationLevels.size(); i++) {
-            final ViolationLevel vl = violationLevels.get(i);
+        for (ViolationLevel vl : violationLevels) {
             if (checkTypeMap.get(vl.check) == type) {
                 return vl;
             }

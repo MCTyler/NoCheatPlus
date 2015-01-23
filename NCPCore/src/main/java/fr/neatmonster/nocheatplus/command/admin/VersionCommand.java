@@ -37,7 +37,7 @@ public class VersionCommand extends BaseCommand{
     }
 
     public static List<String> getVersionInfo() {
-        final List<String> lines = new LinkedList<String>();
+        final List<String> lines = new LinkedList<>();
         final MCAccess mcAccess = NCPAPIProvider.getNoCheatPlusAPI().getMCAccess();
         lines.addAll(Arrays.asList(new String[]{
                 "---- Version information ----",
@@ -50,7 +50,7 @@ public class VersionCommand extends BaseCommand{
         }));
         final Map<String, Set<String>> featureTags = NCPAPIProvider.getNoCheatPlusAPI().getAllFeatureTags();
         if (!featureTags.isEmpty()) {
-            final List<String> features = new LinkedList<String>();
+            final List<String> features = new LinkedList<>();
             // Add present features.
             for (final Entry<String, Set<String>> entry : featureTags.entrySet()) {
                 features.add("  " + entry.getKey() + ": " + StringUtil.join(entry.getValue(), " | "));
@@ -62,7 +62,7 @@ public class VersionCommand extends BaseCommand{
         }
         final Collection<NCPHook> hooks = NCPHookManager.getAllHooks();
         if (!hooks.isEmpty()){
-            final List<String> fullNames = new LinkedList<String>();
+            final List<String> fullNames = new LinkedList<>();
             for (final NCPHook hook : hooks){
                 fullNames.add(hook.getHookName() + " " + hook.getHookVersion());
             }

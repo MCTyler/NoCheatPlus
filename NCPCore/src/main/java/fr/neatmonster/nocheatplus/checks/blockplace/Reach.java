@@ -38,12 +38,10 @@ public class Reach extends Check {
      * Checks a player.
      * 
      * @param player
-     *            the player
-     * @param loc 
-     * @param cc 
-     * @param data2 
-     * @param location
-     *            the location
+     *            the player 
+     * @param block 
+     * @param data 
+     * @param cc
      * @return true, if successful
      */
     public boolean check(final Player player, final Block block, final BlockPlaceData data, final BlockPlaceConfig cc) {

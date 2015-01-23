@@ -39,8 +39,8 @@ public class Reach extends Check {
      * 
      * @param player
      *            the player
-     * @param location
-     *            the location
+     * @param block
+     * @param data
      * @return true, if successful
      */
     public boolean check(final Player player, final Block block, final BlockBreakData data) {

@@ -59,10 +59,15 @@ public class ActionFactory extends AbstractActionFactory<ViolationData, ActionLi
         final String[] parts = definition.split(":");
         final String name = parts[0];
         final Object message = lib.get(parts[0]);
+        @SuppressWarnings("UnusedAssignment")
         int delay = 0;
+        @SuppressWarnings("UnusedAssignment")
         int repeat = 1;
+        @SuppressWarnings("UnusedAssignment")
         boolean toConsole = true;
+        @SuppressWarnings("UnusedAssignment")
         boolean toFile = true;
+        @SuppressWarnings("UnusedAssignment")
         boolean toChat = true;
 
         if (message == null)

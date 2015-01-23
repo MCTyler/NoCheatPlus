@@ -12,6 +12,8 @@ import org.bukkit.plugin.Plugin;
 
 import fr.neatmonster.nocheatplus.actions.ActionFactory;
 import fr.neatmonster.nocheatplus.logging.StaticLog;
+import java.io.IOException;
+import org.bukkit.configuration.InvalidConfigurationException;
 
 /**
  * Central location for everything that's described in the configuration file(s).<br>
@@ -31,7 +33,7 @@ public class ConfigManager {
     };
 
     /** The map containing the configuration files per world. */
-    private static Map<String, ConfigFile> worldsMap = new LinkedHashMap<String, ConfigFile>();
+    private static Map<String, ConfigFile> worldsMap = new LinkedHashMap<>();
 
     private static final WorldConfigProvider<ConfigFile> worldConfigProvider = new WorldConfigProvider<ConfigFile>() {
 
@@ -159,7 +161,7 @@ public class ConfigManager {
                 return worldsMap.get(worldName);
             }
             // Copy the whole map with the default configuration set for this world.
-            final Map<String, ConfigFile> newWorldsMap = new LinkedHashMap<String, ConfigFile>(ConfigManager.worldsMap);
+            final Map<String, ConfigFile> newWorldsMap = new LinkedHashMap<>(ConfigManager.worldsMap);
             final ConfigFile globalConfig = newWorldsMap.get(null);
             newWorldsMap.put(worldName, globalConfig);
             ConfigManager.worldsMap = newWorldsMap;
@@ -186,7 +188,7 @@ public class ConfigManager {
      */
     public static synchronized void init(final Plugin plugin) {
         // (This can lead to minor problems with async checks during reloading.)
-        LinkedHashMap<String, ConfigFile> newWorldsMap = new LinkedHashMap<String, ConfigFile>();
+        LinkedHashMap<String, ConfigFile> newWorldsMap = new LinkedHashMap<>();
         // Try to obtain and parse the global configuration file.
         final File globalFile = new File(plugin.getDataFolder(), "config.yml");
         PathUtils.processPaths(globalFile, "global config", false);
@@ -210,7 +212,7 @@ public class ConfigManager {
                     StaticLog.logSevere("[NoCheatPlus] Could not save back config.yml (see exception below).");
                     StaticLog.logSevere(e);
                 }
-            } catch (final Exception e) {
+            } catch (final IOException | InvalidConfigurationException e) {
                 StaticLog.logSevere("[NoCheatPlus] Could not load config.yml (see exception below).  Continue with default settings...");
                 StaticLog.logSevere(e);
             }
@@ -233,7 +235,7 @@ public class ConfigManager {
         final MemoryConfiguration worldDefaults = PathUtils.getWorldsDefaultConfig(globalConfig); 
 
         // Try to obtain and parse the world-specific configuration files.
-        final HashMap<String, File> worldFiles = new HashMap<String, File>();
+        final HashMap<String, File> worldFiles = new HashMap<>();
         if (plugin.getDataFolder().isDirectory()){
             for (final File file : plugin.getDataFolder().listFiles()){
                 if (file.isFile()) {
@@ -260,7 +262,7 @@ public class ConfigManager {
                     StaticLog.logSevere("[NoCheatPlus] Couldn't save back world-specific configuration for " + worldEntry.getKey() + " (see exception below).");
                     StaticLog.logSevere(e);
                 }
-            } catch (final Exception e) {
+            } catch (final IOException | InvalidConfigurationException e) {
                 StaticLog.logSevere("[NoCheatPlus] Couldn't load world-specific configuration for " + worldEntry.getKey() + " (see exception below). Continue with global default settings...");
                 StaticLog.logSevere(e);
             }
@@ -286,7 +288,7 @@ public class ConfigManager {
      * @param value
      */
     public static synchronized void setForAllConfigs(String path, Object value){
-        final Map<String, ConfigFile> newWorldsMap = new LinkedHashMap<String, ConfigFile>(ConfigManager.worldsMap);
+        final Map<String, ConfigFile> newWorldsMap = new LinkedHashMap<>(ConfigManager.worldsMap);
         for (final ConfigFile cfg : newWorldsMap.values()){
             cfg.set(path, value);
         }
@@ -314,6 +316,7 @@ public class ConfigManager {
      * @param path Config path.
      * @return Value or null.
      */
+    @SuppressWarnings("null")
     public static Double getMaxNumberForAllConfigs(final String path){
         Number max = null;  
         for (final ConfigFile config : worldsMap.values()){
@@ -340,6 +343,7 @@ public class ConfigManager {
      * @param path Config path.
      * @return Value or null.
      */
+    @SuppressWarnings("null")
     public static Double getMinNumberForAllConfigs(final String path){
         Number min = null;  
         for (final ConfigFile config : worldsMap.values()){

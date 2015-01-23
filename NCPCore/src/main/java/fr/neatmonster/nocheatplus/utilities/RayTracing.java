@@ -36,10 +36,12 @@ public abstract class RayTracing {
     /** Maximum steps that will be done. */
     private int maxSteps = Integer.MAX_VALUE;
 
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public RayTracing(double x0, double y0, double z0, double x1, double y1, double z1){
         set(x0, y0, z0, x1, y1, z1);
     }
 
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public RayTracing(){
         set(0, 0, 0, 0, 0, 0);
     }
@@ -74,7 +76,7 @@ public abstract class RayTracing {
         step = 0;
     }
 
-    private static final double tDiff(final double dTotal, final double offset){
+    private static double tDiff(final double dTotal, final double offset){
         if (dTotal > 0.0){
             if (offset >= 1.0) {
                 // Static block change (e.g. diagonal move).
@@ -217,7 +219,7 @@ public abstract class RayTracing {
 
     /**
      * Set the maximal number of steps that loop will do.
-     * @return
+     * @param maxSteps
      */
     public void setMaxSteps(int maxSteps) {
         this.maxSteps = maxSteps;
@@ -225,6 +227,13 @@ public abstract class RayTracing {
 
     /**
      * One step in the loop.
+     * @param blockX
+     * @param blockY
+     * @param blockZ
+     * @param oX
+     * @param oY
+     * @param oZ
+     * @param dT
      * @return If to continue loop.
      */
     protected abstract boolean step(int blockX, int blockY, int blockZ, double oX, double oY, double oZ, double dT);

@@ -51,6 +51,7 @@ public class Text extends Check implements INotifyReload {
      * 			The message to check.
      * @param captcha 
      * 			Used for starting captcha on failure, if configured so.
+     * @param isMainThread
      * @param alreadyCancelled 
      * @return
      */
@@ -77,6 +78,7 @@ public class Text extends Check implements INotifyReload {
     }
 
     @Override
+    @SuppressWarnings("SynchronizeOnNonFinalField")
     public void onReload() {
         synchronized(engine) {
             engine.clear();
@@ -95,6 +97,7 @@ public class Text extends Check implements INotifyReload {
      * @param alreadyCancelled 
      * @return
      */
+    @SuppressWarnings({"null", "SynchronizeOnNonFinalField"})
     private boolean unsafeCheck(final Player player, final String message, final ICaptcha captcha,
             final ChatConfig cc, final ChatData data, boolean isMainThread, final boolean alreadyCancelled) {
 
@@ -231,8 +234,8 @@ public class Text extends Check implements INotifyReload {
             // TODO: more fine grained sync !s
             // TODO: different methods (add or max or add+max or something else).
             for (final  Float res : engMap.values()) {
-                if (cc.textEngineMaximum) wEngine = Math.max(wEngine, res.floatValue());
-                else wEngine += res.floatValue();
+                if (cc.textEngineMaximum) wEngine = Math.max(wEngine, res);
+                else wEngine += res;
             }
         }
         score += wEngine;
@@ -297,7 +300,7 @@ public class Text extends Check implements INotifyReload {
             Collections.sort(keys);
             for (String key : keys) {
                 Float s = engMap.get(key);
-                if (s.floatValue() > 0.0f)
+                if (s > 0.0f)
                     debugParts.add(key + ":" + StringUtil.fdec3.format(s));
             }
             if (wEngine > 0.0f)

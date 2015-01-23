@@ -18,6 +18,7 @@ public class BukkitVersion {
 
     /**
      * Initialize ServerVersion, BukkitVersion, Bugs.
+     * @return 
      */
     public static boolean init() {
         if (initialized) {

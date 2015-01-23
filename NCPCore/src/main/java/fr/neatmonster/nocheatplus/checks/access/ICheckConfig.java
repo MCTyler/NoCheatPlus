@@ -18,10 +18,12 @@ public interface ICheckConfig {
      */
     public boolean isEnabled(CheckType checkType);
     
-    /** On the fly debug flags, to be set by commands and similar. */
+    /** On the fly debug flags, to be set by commands and similar.
+     * @return  */
     public boolean getDebug();
     
-    /** On the fly debug flags, to be set by commands and similar. */ 
+    /** On the fly debug flags, to be set by commands and similar.
+     * @param debug */ 
     public void setDebug(boolean debug);
     
     /**

@@ -23,11 +23,11 @@ public class InventoryUtil {
 	public static int getFreeSlots(final Inventory inventory) {
 		final ItemStack[] contents = inventory.getContents();
 		int count = 0;
-		for (int i = 0; i < contents.length; i++) {
-			if (BlockProperties.isAir(contents[i])) {
-				count ++;
-			}
-		}
+            for (ItemStack content : contents) {
+                if (BlockProperties.isAir(content)) {
+                    count ++;
+                }
+            }
 		return count;
 	}
 
@@ -44,15 +44,13 @@ public class InventoryUtil {
 		final int durability = reference.getDurability();
 		final ItemStack[] contents = inventory.getContents();
 		int count = 0;
-		for (int i = 0; i < contents.length; i++) {
-			final ItemStack stack = contents[i];
-			if (stack == null) {
-				continue;
-			}
-			else if (stack.getType() == mat && stack.getDurability() == durability) {
-				count ++;
-			}
-		}
+            for (ItemStack stack : contents) {
+                if (stack == null) {
+                }
+                else if (stack.getType() == mat && stack.getDurability() == durability) {
+                    count ++;
+                }
+            }
 		return count;
 	}
 
@@ -69,15 +67,12 @@ public class InventoryUtil {
 	/**
 	 * Search for players / passengers (broken by name: closes the inventory of first player found including entity and passengers recursively).
 	 * @param entity
+         * @return 
 	 */
 	public static boolean closePlayerInventoryRecursively(Entity entity) {
 		// Find a player.
 		final Player player = getPlayerPassengerRecursively(entity);
-		if (player != null && closeOpenInventory((Player) entity)) {
-			return true;
-		} else {
-			return false;
-		}
+            return player != null && closeOpenInventory((Player) entity);
 	}
 	
 	/**

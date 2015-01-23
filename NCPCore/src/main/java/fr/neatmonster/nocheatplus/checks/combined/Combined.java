@@ -13,7 +13,7 @@ import fr.neatmonster.nocheatplus.utilities.TickTask;
 public class Combined {
 	
 	/** All hits within this angle range are regarded as stationary. */
-	private static float stationary = 32f;
+	private static final float stationary = 32f;
 	
 	/**
 	 * Check if a penalty is set by changing horizontal facing dierection too often.
@@ -102,6 +102,7 @@ public class Combined {
 	 * @param yaw
 	 * @param now
 	 * @param worldName
+         * @param data
 	 * @return
 	 */
 	public static final boolean checkYawRate(final Player player, final float yaw, final long now, final String worldName, final CombinedData data) {

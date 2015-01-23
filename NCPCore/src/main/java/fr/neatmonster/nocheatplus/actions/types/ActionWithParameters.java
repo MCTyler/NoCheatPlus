@@ -9,6 +9,8 @@ import fr.neatmonster.nocheatplus.actions.ParameterName;
 
 /**
  * Action with parameters is used for the messages (chat, console, log) or the commands.
+ * @param <D>
+ * @param <L>
  */
 public abstract class ActionWithParameters<D extends ParameterHolder, L extends AbstractActionList<D, L>> extends Action<D, L> {
 	/** The parts of the message. */
@@ -74,7 +76,7 @@ public abstract class ActionWithParameters<D extends ParameterHolder, L extends 
      * @param message
      *            the message
      */
-    protected void parseMessage(final String message) {
+    protected final void parseMessage(final String message) {
         final String parts[] = message.split("\\[", 2);
 
         // No opening braces left.

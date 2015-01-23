@@ -25,9 +25,9 @@ public abstract class OnDemandTickListener implements TickListener{
 	@Override
 	public void onTick(final int tick, final long timeLast) {
 		if (!isRegistered){
-			// Could happen due to concurrency.
-			// (No extra unregister, to preserve order).
-			return;
+                    // Could happen due to concurrency.
+                    // (No extra unregister, to preserve order).
+
 		}
 		else if (!delegateTick(tick, timeLast)){
 			// Remove from TickListenerS.

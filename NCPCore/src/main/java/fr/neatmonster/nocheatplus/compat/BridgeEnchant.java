@@ -8,7 +8,7 @@ import fr.neatmonster.nocheatplus.utilities.BlockProperties;
 
 public final class BridgeEnchant {
 
-    private static final Enchantment parseEnchantment(final String name) {
+    private static Enchantment parseEnchantment(final String name) {
         try {
             return Enchantment.getByName(name);
         } catch (Exception e) {

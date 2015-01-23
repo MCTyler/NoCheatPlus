@@ -10,6 +10,7 @@ import fr.neatmonster.nocheatplus.checks.ViolationData;
  */
 public class ActionList extends AbstractActionList<ViolationData, ActionList>{
 
+        @SuppressWarnings("FieldNameHidesFieldInSuperclass")
 	public static final ActionListFactory<ViolationData, ActionList> listFactory = new ActionListFactory<ViolationData, ActionList>() {
 
 		@Override

@@ -98,6 +98,7 @@ public class FightListener extends CheckListener implements JoinLeaveListener{
      *            The EntityDamageByEntityEvent
      * @return 
      */
+    @SuppressWarnings("UnusedAssignment")
     private boolean handleNormalDamage(final Player player, final Entity damaged, final double damage, final int tick, final FightData data) {
         final FightConfig cc = FightConfig.getConfig(player);
 
@@ -401,8 +402,7 @@ public class FightListener extends CheckListener implements JoinLeaveListener{
     public static final boolean hasThorns(final Player player){
         final PlayerInventory inv = player.getInventory();
         final ItemStack[] contents = inv.getArmorContents();
-        for (int i = 0; i < contents.length; i++){
-            final ItemStack stack = contents[i];
+        for (ItemStack stack : contents) {
             if (stack != null && stack.getEnchantmentLevel(Enchantment.THORNS) > 0){
                 return true;
             }
@@ -417,6 +417,7 @@ public class FightListener extends CheckListener implements JoinLeaveListener{
      *            the event
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    @SuppressWarnings("null")
     public void onEntityDamage(final EntityDamageEvent event) {
 
         final Entity damaged = event.getEntity();

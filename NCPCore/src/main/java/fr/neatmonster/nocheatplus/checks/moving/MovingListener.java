@@ -112,22 +112,22 @@ public class MovingListener extends CheckListener implements TickListener, IRemo
      * Unused instances.<br>
      * Might be better due to cascading events in case of actions or plugins doing strange things.
      */
-    private final List<MoveInfo> parkedInfo = new ArrayList<MoveInfo>(10);
+    private final List<MoveInfo> parkedInfo = new ArrayList<>(10);
 
     /**
      * Store events by player name, in order to invalidate moving processing on higher priority level in case of teleports.
      */
-    private final Map<String, PlayerMoveEvent> processingEvents = new HashMap<String, PlayerMoveEvent>();
+    private final Map<String, PlayerMoveEvent> processingEvents = new HashMap<>();
 
     /** Player names to check hover for, case insensitive. */
-    private final Set<String> hoverTicks = new LinkedHashSet<String>(30); // TODO: Rename
+    private final Set<String> hoverTicks = new LinkedHashSet<>(30); // TODO: Rename
 
     /** Player names to check enforcing the location for in onTick, case insensitive. */
-    private final Set<String> playersEnforce = new LinkedHashSet<String>(30);
+    private final Set<String> playersEnforce = new LinkedHashSet<>(30);
 
     private int hoverTicksStep = 5;
 
-    private final Set<EntityType> normalVehicles = new HashSet<EntityType>();
+    private final Set<EntityType> normalVehicles = new HashSet<>();
 
     /** Location for temporary use with getLocation(useLoc). Always call setWorld(null) after use. Use LocUtil.clone before passing to other API. */
     final Location useLoc = new Location(null, 0, 0, 0); // TODO: Put to use...
@@ -304,6 +304,7 @@ public class MovingListener extends CheckListener implements TickListener, IRemo
      *            the event
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    @SuppressWarnings("null")
     public void onPlayerMove(final PlayerMoveEvent event) {
         final Player player = event.getPlayer();
 
@@ -341,13 +342,9 @@ public class MovingListener extends CheckListener implements TickListener, IRemo
             // TODO: sleeping: (which cb!) NCPAPIProvider.getNoCheatPlusAPI().getLogManager().debug(Streams.TRACE_FILE, "-> " + player.isSleepingIgnored());
             data.sfHoverTicks = -1;
             earlyReturn = true;
-        } else if (!from.getWorld().equals(to.getWorld())) {
-            // Keep hover ticks.
-            // Ignore changing worlds.
-            earlyReturn = true;
-        } else {
-            earlyReturn = false;
-        }
+        } else earlyReturn = !from.getWorld().equals(to.getWorld()); // Keep hover ticks.
+        // Ignore changing worlds.
+        
 
         // TODO: Might log base parts here (+extras).
         if (earlyReturn) {
@@ -855,6 +852,7 @@ public class MovingListener extends CheckListener implements TickListener, IRemo
      *            the event
      */
     @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
+    @SuppressWarnings("null")
     public void onPlayerTeleport(final PlayerTeleportEvent event) {
         final Player player = event.getPlayer();
         final MovingData data = MovingData.getData(player);
@@ -1500,7 +1498,7 @@ public class MovingListener extends CheckListener implements TickListener, IRemo
 
     @Override
     public void onTick(final int tick, final long timeLast) {
-        final List<String> rem = new ArrayList<String>(hoverTicks.size()); // Pessimistic.
+        final List<String> rem = new ArrayList<>(hoverTicks.size()); // Pessimistic.
         // TODO: Change to per world checking (as long as configs are per world).
 
         // Enforcing location check.

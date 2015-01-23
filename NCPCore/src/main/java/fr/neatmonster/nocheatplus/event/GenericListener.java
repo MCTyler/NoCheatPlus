@@ -16,6 +16,7 @@ import org.bukkit.plugin.Plugin;
 
 import fr.neatmonster.nocheatplus.NCPAPIProvider;
 import fr.neatmonster.nocheatplus.logging.Streams;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * listener registered for one event only. Allows to delegate to other registered listeners.
@@ -91,6 +92,7 @@ public class GenericListener<E extends Event> implements Listener, EventExecutor
 	}
 	
 	@Override
+        @SuppressWarnings("null")
 	public void execute(final Listener listener, final Event event){
 		if (!clazz.isAssignableFrom(event.getClass())){
 			// Strange but true.
@@ -99,16 +101,16 @@ public class GenericListener<E extends Event> implements Listener, EventExecutor
 		// TODO: profiling option !
 		final Cancellable cancellable = isCancellable ? (Cancellable) event : null;
 
+                @SuppressWarnings("LocalVariableHidesMemberVariable")
 		final MethodEntry[] entries = this.entries;
-		for (int i = 0; i < entries.length ; i++){
-			final MethodEntry entry = entries[i];
-			try {
-				if (!isCancellable || !entry.ignoreCancelled || !cancellable.isCancelled()) entry.method.invoke(entry.listener, event);
-			} catch (Throwable t) {
-				// IllegalArgumentException IllegalAccessException InvocationTargetException
-				onError(entry, event, t);
-			}
-		}
+            for (MethodEntry entry : entries) {
+                try {
+                    if (!isCancellable || !entry.ignoreCancelled || !cancellable.isCancelled()) entry.method.invoke(entry.listener, event);
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException t) {
+                    // IllegalArgumentException IllegalAccessException InvocationTargetException
+                    onError(entry, event, t);
+                }
+            }
 	}
 
 
@@ -130,6 +132,7 @@ public class GenericListener<E extends Event> implements Listener, EventExecutor
 	public void addMethodEntry(final MethodEntry entry){
 		// TODO: maybe optimize later.
 		// MethodOrder: the new enties order will be compared versus the old entries tags, not the other way round !).
+                @SuppressWarnings("LocalVariableHidesMemberVariable")
 		final MethodEntry[] entries = this.entries;
 		int insertion = -1;
 		if (entry.order != null){
@@ -175,8 +178,9 @@ public class GenericListener<E extends Event> implements Listener, EventExecutor
 	 * @param listener
 	 */
 	public void remove(Listener listener) {
+                @SuppressWarnings("LocalVariableHidesMemberVariable")
 		final MethodEntry[] entries = this.entries;
-		final List<MethodEntry> keep = new ArrayList<MethodEntry>(entries.length);
+		final List<MethodEntry> keep = new ArrayList<>(entries.length);
 		for (MethodEntry entry : entries){
 			if (entry.listener != listener) keep.add(entry);
 		}

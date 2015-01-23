@@ -29,6 +29,7 @@ public class InstantBow extends Check {
      *            the player
      * @param force
      *            the force
+     * @param now
      * @return true, if successful
      */
     public boolean check(final Player player, final float force, final long now) {

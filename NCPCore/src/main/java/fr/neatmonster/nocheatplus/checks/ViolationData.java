@@ -1,6 +1,5 @@
 package fr.neatmonster.nocheatplus.checks;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.entity.Player;
@@ -12,6 +11,7 @@ import fr.neatmonster.nocheatplus.actions.ParameterName;
 import fr.neatmonster.nocheatplus.actions.types.CancelAction;
 import fr.neatmonster.nocheatplus.checks.access.IViolationInfo;
 import fr.neatmonster.nocheatplus.logging.StaticLog;
+import java.util.EnumMap;
 
 /**
  * Violation specific data, for executing actions.<br>
@@ -59,6 +59,7 @@ public class ViolationData implements IViolationInfo, ActionData{
      * @param actions
      *            the actions
      */
+    @SuppressWarnings("LeakingThisInConstructor")
     public ViolationData(final Check check, final Player player, final double vL, final double addedVL,
             final ActionList actions) {
         this.check = check;
@@ -67,9 +68,10 @@ public class ViolationData implements IViolationInfo, ActionData{
         this.addedVL = addedVL;
         this.actions = actions;
         this.applicableActions = actions.getActions(vL);
+        @SuppressWarnings("LocalVariableHidesMemberVariable")
         boolean needsParameters = false;
-        for (int i = 0; i < applicableActions.length; i++) {
-            if (applicableActions[i].needsParameters()) {
+        for (Action<ViolationData, ActionList> applicableAction : applicableActions) {
+            if (applicableAction.needsParameters()) {
                 needsParameters = true;
                 break;
             }
@@ -160,7 +162,7 @@ public class ViolationData implements IViolationInfo, ActionData{
     @Override
     public void setParameter(final ParameterName parameterName, String value) {
         if (parameters == null) {
-            parameters = new HashMap<ParameterName, String>();
+            parameters = new EnumMap<ParameterName, String>(ParameterName.class);
         }
         parameters.put(parameterName, value);
     }

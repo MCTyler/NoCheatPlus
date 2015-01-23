@@ -37,8 +37,7 @@ public class FastBreak extends Check {
      *            the block
      * @param isInstaBreak 
      * @param data 
-     * @param cc 
-     * @param elaspedTime
+     * @param cc
      * @return true, if successful
      */
     public boolean check(final Player player, final Block block, final AlmostBoolean isInstaBreak, final BlockBreakConfig cc, final BlockBreakData data) {

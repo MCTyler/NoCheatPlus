@@ -13,6 +13,7 @@ import fr.neatmonster.nocheatplus.config.ConfPaths;
 import fr.neatmonster.nocheatplus.config.ConfigManager;
 import fr.neatmonster.nocheatplus.logging.StaticLog;
 import fr.neatmonster.nocheatplus.utilities.ReflectionUtil;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Utility class with static access methods to bridge compatibility issues, such as arising from changes in Bukkit from MC 1.5.2 to 1.6.1.
@@ -25,14 +26,14 @@ import fr.neatmonster.nocheatplus.utilities.ReflectionUtil;
 public class BridgeHealth {
 
     /** For debugging purposes. TODO: Reset on shutdown !? */
-    private static Set<String> failures = new HashSet<String>(); 
+    private static final Set<String> failures = new HashSet<>(); 
 
     /**
      * This method is meant to be called on API that changed from int to double.<br>
      * NOTE: Might get changed to return a Number instance.
      * @param obj Object to call the method on.
      * @param methodName
-     * @param RuntimeException with reason Will be thrown if no recovery from present methods is possible. If not null the first call gets logged as "API incompatibility".
+     * @param reason
      * @return
      */
     public static final double getDoubleOrInt(final Object obj, final String methodName, final Throwable reason){
@@ -101,7 +102,6 @@ public class BridgeHealth {
      * Set the damage from an EntityDamageEvent.
      * @param event
      * @param damage
-     * @return
      * @throws RuntimeException, in case of an IncompatibleClassChangeError without success on recovery attempts.
      */
     public static void setDamage(final EntityDamageEvent event, final double damage){
@@ -162,7 +162,6 @@ public class BridgeHealth {
      * Set the health for an entity (LivingEntity).
      * @param entity
      * @param health
-     * @return
      * @throws RuntimeException, in case of an IncompatibleClassChangeError without success on recovery attempts.
      */
     public static void setHealth(final LivingEntity entity, final double health){
@@ -204,6 +203,7 @@ public class BridgeHealth {
      * @param obj
      * @param methodName
      * @param value
+     * @param reason
      */
     public static void invokeVoid(final Object obj, final String methodName, final int value, final Throwable reason){
         if (reason != null){
@@ -214,7 +214,7 @@ public class BridgeHealth {
         }
         try {
             obj.getClass().getMethod(methodName, int.class).invoke(obj, value);
-        } catch (Throwable t) {
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException t) {
             throw new RuntimeException("Could not invoke " + methodName + " with one argument (int) on: " + obj.getClass().getName(), reason);
         }
     }

@@ -13,13 +13,17 @@ public interface GenericInstanceRegistry {
 	
 	/**
 	 * Register the instance by its own class.
+         * @param <T>
 	 * @param instance
+         * @return 
 	 */
 	public <T> T registerGenericInstance(T instance);
 	
 	/**
 	 * Register an instance under for a super-class. The registry implementation might specify id overriding is allowed.
-	 * @param registerAs
+         * @param <T>
+         * @param <TI>
+         * @param registerFor
 	 * @param instance
 	 * @return The previously registered instance. If none was registered, null is returned.
 	 */
@@ -27,13 +31,15 @@ public interface GenericInstanceRegistry {
 	
 	/**
 	 * Retrieve the instance registered for the given class.
-	 * @param registeredBy
+         * @param <T>
+         * @param registeredFor
 	 * @return The instance, or null, if none is registered.
 	 */
 	public <T> T getGenericInstance(Class<T> registeredFor);
 	
 	/**
 	 * Remove a registration. The registry implementation might specify id removing is allowed.
+         * @param <T>
 	 * @param registeredFor
 	 * @return The previously registered instance. If none was registered, null is returned.
 	 */

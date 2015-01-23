@@ -1,7 +1,6 @@
 package fr.neatmonster.nocheatplus.players;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -54,6 +53,7 @@ import fr.neatmonster.nocheatplus.hooks.APIUtils;
 import fr.neatmonster.nocheatplus.logging.StaticLog;
 import fr.neatmonster.nocheatplus.utilities.IdUtil;
 import fr.neatmonster.nocheatplus.utilities.StringUtil;
+import java.util.EnumMap;
 
 /**
  * Central access point for a lot of functionality for managing data, especially removing data for cleanup.<br>
@@ -75,7 +75,7 @@ public class DataManager implements Listener, INotifyReload, INeedConfig, Compon
     private int foundInconsistencies = 0;
 
     /** PlayerData storage. */
-    protected final Map<String, PlayerData> playerData = new LinkedHashMap<String, PlayerData>(100);
+    protected final Map<String, PlayerData> playerData = new LinkedHashMap<>(100);
 
     /*
      * 
@@ -85,7 +85,7 @@ public class DataManager implements Listener, INotifyReload, INeedConfig, Compon
      * <hr>
      * Later this might hold central player data objects instead of the long only.
      */
-    private final Map<String, Long> lastLogout = new LinkedHashMap<String, Long>(50, 0.75f, true);
+    private final Map<String, Long> lastLogout = new LinkedHashMap<>(50, 0.75f, true);
 
     /**
      * Keeping track of online players.<br>
@@ -93,18 +93,18 @@ public class DataManager implements Listener, INotifyReload, INeedConfig, Compon
      * <li>exact player name -> Player instance</li>
      * <li>lower case player name -> Player instance</li>
      */
-    protected final Map<String, Player> onlinePlayers = new LinkedHashMap<String, Player>(100);
+    protected final Map<String, Player> onlinePlayers = new LinkedHashMap<>(100);
 
     /**
      * IRemoveData instances.
      * // TODO: might use a map for those later (extra or not).
      */
-    protected final ArrayList<IRemoveData> iRemoveData = new ArrayList<IRemoveData>();
+    protected final ArrayList<IRemoveData> iRemoveData = new ArrayList<>();
 
     /**
      * Execution histories of the checks.
      */
-    protected final Map<CheckType, Map<String, ExecutionHistory>> executionHistories = new HashMap<CheckType, Map<String,ExecutionHistory>>();
+    protected final Map<CheckType, Map<String, ExecutionHistory>> executionHistories = new EnumMap<>(CheckType.class);
 
     /** Flag if data expiration is active at all. */
     protected boolean doExpireData = false;
@@ -123,6 +123,7 @@ public class DataManager implements Listener, INotifyReload, INeedConfig, Compon
     /**
      * Sets the static instance reference.
      */
+    @SuppressWarnings("LeakingThisInConstructor")
     public DataManager() {
         instance = this;
     }
@@ -136,7 +137,7 @@ public class DataManager implements Listener, INotifyReload, INeedConfig, Compon
             return;
         }
         final long now = System.currentTimeMillis();
-        final Set<CheckDataFactory> factories = new LinkedHashSet<CheckDataFactory>();
+        final Set<CheckDataFactory> factories = new LinkedHashSet<>();
         final Set<Entry<String, Long>> entries = lastLogout.entrySet();
         final Iterator<Entry<String, Long>> iterator = entries.iterator();
         while (iterator.hasNext()) {
@@ -192,7 +193,7 @@ public class DataManager implements Listener, INotifyReload, INeedConfig, Compon
      * Quit or kick.
      * @param player
      */
-    private final void onLeave(final Player player) {
+    private void onLeave(final Player player) {
         final long now = System.currentTimeMillis();
         lastLogout.put(player.getName(), now);
         CombinedData.getData(player).lastLogoutTime = now;
@@ -272,7 +273,7 @@ public class DataManager implements Listener, INotifyReload, INeedConfig, Compon
      * @param checkType
      */
     public static void clearData(final CheckType checkType) {
-        final Set<CheckDataFactory> factories = new HashSet<CheckDataFactory>();
+        final Set<CheckDataFactory> factories = new HashSet<>();
         for (final CheckType type : APIUtils.getWithChildren(checkType)) {
             final Map<String, ExecutionHistory> map = instance.executionHistories.get(type);
             if (map != null) {
@@ -321,8 +322,7 @@ public class DataManager implements Listener, INotifyReload, INeedConfig, Compon
             if (dataFactory == null) {
                 continue;
             }
-            for (int i = 0; i < players.length; i++) {
-                final Player player = players[i];
+            for (Player player : players) {
                 final ICheckConfig config = configFactory.getConfig(player);
                 if (config == null) {
                     continue;
@@ -356,7 +356,7 @@ public class DataManager implements Listener, INotifyReload, INeedConfig, Compon
         }
 
         // Collect factories.
-        final Set<CheckDataFactory> factories = new HashSet<CheckDataFactory>();
+        final Set<CheckDataFactory> factories = new HashSet<>();
         for (CheckType otherType : APIUtils.getWithChildren(checkType)) {
             final CheckDataFactory otherFactory = otherType.getDataFactory();
             if (otherFactory != null) {
@@ -380,7 +380,7 @@ public class DataManager implements Listener, INotifyReload, INeedConfig, Compon
     /**
      * Clear player related data, only for registered components (not execution history, violation history, normal check data).<br>
      * That should at least go for chat engine data.
-     * @param CheckType
+     * @param checkType
      * @param PlayerName
      * @return If something was removed.
      */
@@ -530,8 +530,7 @@ public class DataManager implements Listener, INotifyReload, INeedConfig, Compon
         int missing = 0;
         int changed = 0;
         int expectedSize = 0;
-        for (int i = 0; i < onlinePlayers.length; i++) {
-            final Player player = onlinePlayers[i];
+        for (Player player : onlinePlayers) {
             final String name = player.getName();
             //			if (player.isOnline()) {
             expectedSize += 1 + (name.equals(name.toLowerCase()) ? 0 : 1);
@@ -553,7 +552,7 @@ public class DataManager implements Listener, INotifyReload, INeedConfig, Compon
         if (missing != 0 || changed != 0 || expectedSize != storedSize) {
             foundInconsistencies ++;
             if (!ConfigManager.getConfigFile().getBoolean(ConfPaths.DATA_CONSISTENCYCHECKS_SUPPRESSWARNINGS)) {
-                final List<String> details = new LinkedList<String>();
+                final List<String> details = new LinkedList<>();
                 if (missing != 0) {
                     details.add("missing online players (" + missing + ")");
                 }

@@ -32,7 +32,7 @@ import fr.neatmonster.nocheatplus.logging.details.LogOptions.CallContext;
  *
  */
 @SetupOrder(priority = Integer.MIN_VALUE) // Just in case.
-public class BukkitLogManager extends AbstractLogManager implements INotifyReload {
+public final class BukkitLogManager extends AbstractLogManager implements INotifyReload {
 
     // TODO: Make LogManager an interface <- AbstractLogManager <- BukkitLogManager (hide some / instanceof).
 
@@ -81,6 +81,7 @@ public class BukkitLogManager extends AbstractLogManager implements INotifyReloa
 
     /**
      * Create default loggers and streams.
+     * @param config
      */
     protected void createDefaultLoggers(ConfigFile config) {
         // Default streams.

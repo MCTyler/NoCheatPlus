@@ -71,13 +71,14 @@ public class NoCheatPlusCommand extends BaseCommand{
         }
     }
 
-    private Set<String> rootLabels = new LinkedHashSet<String>();
+    private final Set<String> rootLabels = new LinkedHashSet<>();
 
     /**
      * Instantiates a new command handler.
      * 
      * @param plugin
      *            the instance of NoCheatPlus
+     * @param notifyReload
      */
     public NoCheatPlusCommand(final JavaPlugin plugin, final List<INotifyReload> notifyReload) {
         super(plugin, "nocheatplus", null, new String[]{"ncp"});
@@ -116,8 +117,9 @@ public class NoCheatPlusCommand extends BaseCommand{
      * @return
      */
     public Collection<String> getAllSubCommandPermissions(){
-        final Set<String> set = new LinkedHashSet<String>(rootLabels.size());
-        for (final String label : rootLabels){
+        final Set<String> set = new LinkedHashSet<>(rootLabels.size());
+        for (@SuppressWarnings("LocalVariableHidesMemberVariable")
+        final String label : rootLabels){
             set.add(subCommands.get(label).permission);
         }
         return set;

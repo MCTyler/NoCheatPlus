@@ -22,19 +22,20 @@ import org.bukkit.configuration.MemoryConfiguration;
 import fr.neatmonster.nocheatplus.logging.StaticLog;
 import fr.neatmonster.nocheatplus.utilities.ds.prefixtree.CharPrefixTree;
 import fr.neatmonster.nocheatplus.utilities.ds.prefixtree.SimpleCharPrefixTree;
+import java.util.logging.Level;
 
 public class PathUtils {
 
     // Deprecated paths.
-    private static final Set<String> deprecatedFields = new LinkedHashSet<String>();
+    private static final Set<String> deprecatedFields = new LinkedHashSet<>();
     private static final SimpleCharPrefixTree deprecatedPrefixes = new SimpleCharPrefixTree();
 
     // Paths only for the global config.
-    private static final Set<String> globalOnlyFields = new HashSet<String>();
+    private static final Set<String> globalOnlyFields = new HashSet<>();
     private static final SimpleCharPrefixTree globalOnlyPrefixes = new SimpleCharPrefixTree();
 
     // Paths moved to other paths.
-    private static final Map<String, String> movedPaths = new LinkedHashMap<String, String>();
+    private static final Map<String, String> movedPaths = new LinkedHashMap<>();
 
     static{
         initPaths();
@@ -86,8 +87,7 @@ public class PathUtils {
             if (path != null){
                 pathPrefixes.feed(path);
             }
-        } catch (IllegalArgumentException e) {
-        } catch (IllegalAccessException e) {
+        } catch (IllegalArgumentException | IllegalAccessException e) {
         }
     }
 
@@ -95,8 +95,7 @@ public class PathUtils {
         try {
             final String path = field.get(null).toString();
             movedPaths.put(path, rel.newPath());
-        } catch (IllegalArgumentException e) {
-        } catch (IllegalAccessException e) {
+        } catch (IllegalArgumentException | IllegalAccessException e) {
         }
     }
 
@@ -104,14 +103,14 @@ public class PathUtils {
      * Warn on the console if paths are used.
      * @param config
      * @param paths
-     * @param msgHeader
+     * @param msgPrefix
      * @param warnedPaths Paths which were found, can be null.
      */
     protected static void warnPaths(final ConfigFile config, final CharPrefixTree<?, ?> paths, final String msgPrefix, final Set<String> warnedPaths){
         final Logger logger = Bukkit.getLogger();
         for (final String path : config.getKeys(true)){
             if (paths.hasPrefix(path)){
-                logger.warning("[NoCheatPlus] Config path '" + path + "'" + msgPrefix);
+                logger.log(Level.WARNING, "[NoCheatPlus] Config path ''{0}''{1}", new Object[]{path, msgPrefix});
                 if (warnedPaths != null){
                     warnedPaths.add(path);
                 }
@@ -123,13 +122,14 @@ public class PathUtils {
      * Run all warning checks and alter config if necessary (GlobalConfig, Deprecated, Moved).
      * @param file
      * @param configName
+     * @param isWorldConfig
      */
     public static void processPaths(File file, String configName, boolean isWorldConfig){
         ConfigFile config = new ConfigFile();
         try {
             config.load(file);
-            final Set<String> removePaths = new LinkedHashSet<String>();
-            final Map<String, Object> addPaths = new LinkedHashMap<String, Object>();
+            final Set<String> removePaths = new LinkedHashSet<>();
+            final Map<String, Object> addPaths = new LinkedHashMap<>();
             if (isWorldConfig){
                 // TODO: might remove these [though some global only paths might actually work].
                 processGlobalOnlyPaths(config, configName, null);
@@ -156,15 +156,14 @@ public class PathUtils {
                 }
             }
         } catch (FileNotFoundException e) {
-        } catch (IOException e) {
-        } catch (InvalidConfigurationException e) {
+        } catch (IOException | InvalidConfigurationException e) {
         }
     }
 
     /**
      * Set paths.
      * @param config
-     * @param addPaths
+     * @param setPaths
      */
     public static void setPaths(final ConfigFile config, final Map<String, Object> setPaths) {
         for (final Entry<String, Object> entry : setPaths.entrySet()){
@@ -202,9 +201,9 @@ public class PathUtils {
      * @param config
      * @param configName
      * @param removePaths
-     * @param addPaths 
-     * @return If entries were added (paths to be removed are processed later).
+     * @param addPaths
      */
+    @SuppressWarnings("null")
     protected static void processMovedPaths(final ConfigFile config, final String configName, final Set<String> removePaths, final Map<String, Object> addPaths) {
         final Logger logger = Bukkit.getLogger();
         for (final Entry<String, String> entry : movedPaths.entrySet()){
@@ -222,7 +221,7 @@ public class PathUtils {
                     addPaths.put(newPath, value);
                     removePaths.add(path);
                 }
-                logger.warning("[NoCheatPlus] Config path '" + path + "' (" + configName + ") has been moved" + to);
+                logger.log(Level.WARNING, "[NoCheatPlus] Config path ''{0}'' ({1}) has been moved{2}", new Object[]{path, configName, to});
             }
         }
     }
@@ -230,8 +229,8 @@ public class PathUtils {
     /**
      * Warn about paths that are deprecated (not in use).
      * @param config
-     * @param paths
      * @param configName
+     * @param removePaths
      */
     protected static void processDeprecatedPaths(ConfigFile config, String configName, final Set<String> removePaths){
         warnPaths(config, deprecatedPrefixes, " (" + configName + ") is not in use anymore.", removePaths);
@@ -240,8 +239,8 @@ public class PathUtils {
     /**
      * Warn about paths that are only to be set in the global config.
      * @param config
-     * @param paths
      * @param configName
+     * @param removePaths
      */
     protected static void processGlobalOnlyPaths(ConfigFile config, String configName, final Set<String> removePaths){
         warnPaths(config, globalOnlyPrefixes, " (" + configName + ") should only be set in the global configuration.", removePaths);
@@ -285,8 +284,7 @@ public class PathUtils {
 
     public static boolean mayBeInConfig(final String path){
         if (deprecatedPrefixes.hasPrefix(path)) return false;
-        if (movedPaths.containsKey(path)) return false;
-        return true;
+        return !movedPaths.containsKey(path);
     }
 
 }

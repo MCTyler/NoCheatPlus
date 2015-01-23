@@ -14,7 +14,7 @@ public interface IViolationInfo extends ParameterHolder{
      */
     public double getAddedVl();
     /**
-     * Get the total violation level the player has right now. This is not the value shown with "/ncp info <player>", but the value used for actions.
+     * Get the total violation level the player has right now. This is not the value shown with "/ncp info player", but the value used for actions.
      * @return
      */
     public double getTotalVl();

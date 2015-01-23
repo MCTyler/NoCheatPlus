@@ -8,6 +8,8 @@ import fr.neatmonster.nocheatplus.utilities.ds.corw.LinkedHashMapCOW;
 /**
  * Simple cache for configurations, adding some convenience functionality.
  * @author web4web1
+ * @param <K>
+ * @param <C>
  *
  */
 public abstract class ConfigCache <K, C> {
@@ -24,9 +26,9 @@ public abstract class ConfigCache <K, C> {
         this.cow = cow;
         // Linked or not linked ?
         if (cow) {
-            configs = new LinkedHashMapCOW<K, C>(initialCapacity);
+            configs = new LinkedHashMapCOW<>(initialCapacity);
         } else {
-            configs = new HashMap<K, C>(initialCapacity);
+            configs = new HashMap<>(initialCapacity);
         }
     }
 

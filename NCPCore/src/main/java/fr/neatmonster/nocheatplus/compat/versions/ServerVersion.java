@@ -20,13 +20,14 @@ public class ServerVersion {
 
     /**
      * Attempt to return the Minecraft version for a given server version string.
-     * @param serverVersion As returned by Bukkit.getServer().getVersion();
+     * @param versionCandidates
      * @return null if not known/parsable.
      */
     public static String parseMinecraftVersion(String... versionCandidates) {
         for (String serverVersion : versionCandidates) {
             serverVersion = serverVersion.trim();
-            for (String minecraftVersion : new String[]{
+            for (@SuppressWarnings("LocalVariableHidesMemberVariable")
+                String minecraftVersion : new String[]{
                     collectVersion(serverVersion, 0),
                     parseMinecraftVersionGeneric(serverVersion),
                     parseMinecraftVersionTokens(serverVersion)
@@ -218,7 +219,7 @@ public class ServerVersion {
 
     public static <V> V select(final String cmpVersion, final V valueLT, final V valueEQ, final V valueGT, final V valueUnknown) {
         final String mcVersion = ServerVersion.getMinecraftVersion();
-        if (mcVersion == ServerVersion.UNKNOWN_VERSION) {
+        if (mcVersion == null ? ServerVersion.UNKNOWN_VERSION == null : mcVersion.equals(ServerVersion.UNKNOWN_VERSION)) {
             return valueUnknown;
         } else {
             final int cmp = ServerVersion.compareVersions(mcVersion, cmpVersion);

@@ -77,7 +77,7 @@ public class CombinedListener extends CheckListener {
         if (modifier == null) modifier = cc.invulnerableModifierDefault;
         final CombinedData data = CombinedData.getData(player);
         // TODO: account for tick task reset ? [it should not though, due to data resetting too, but API would allow it]
-        if (TickTask.getTick() >= data.invulnerableTick + modifier.intValue()) return;
+        if (TickTask.getTick() >= data.invulnerableTick + modifier) return;
         // Still invulnerable.
         event.setCancelled(true);
         counters.addPrimaryThread(idFakeInvulnerable, 1);

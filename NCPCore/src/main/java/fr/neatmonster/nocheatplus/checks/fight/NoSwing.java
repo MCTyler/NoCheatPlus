@@ -22,6 +22,8 @@ public class NoSwing extends Check {
      * 
      * @param player
      *            the player
+     * @param data
+     * @param cc
      * @return true, if successful
      */
     public boolean check(final Player player, final FightData data, final FightConfig cc) {

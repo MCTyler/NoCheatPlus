@@ -14,13 +14,13 @@ import fr.neatmonster.nocheatplus.utilities.ds.CoordMap;
 public class FakeBlockCache extends BlockCache {
 
     /** Cached type-ids. */
-    private final CoordMap<Integer> idMapStored = new CoordMap<Integer>(23);
+    private final CoordMap<Integer> idMapStored = new CoordMap<>(23);
 
     /** Cached data values. */
-    private final CoordMap<Integer> dataMapStored = new CoordMap<Integer>(23);
+    private final CoordMap<Integer> dataMapStored = new CoordMap<>(23);
 
     /** Cached shape values. */
-    private final CoordMap<double[]> boundsMapStored = new CoordMap<double[]>(23);
+    private final CoordMap<double[]> boundsMapStored = new CoordMap<>(23);
 
     /**
      * Set with data=0 and bounds=full.

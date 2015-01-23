@@ -134,7 +134,7 @@ public class FightConfig extends ACheckConfig {
         directionPenalty = data.getLong(ConfPaths.FIGHT_DIRECTION_PENALTY);
         directionActions = data.getOptimizedActionList(ConfPaths.FIGHT_DIRECTION_ACTIONS, Permissions.FIGHT_DIRECTION);
 
-        fastHealCheck = data.getBoolean(ConfPaths.FIGHT_FASTHEAL_CHECK);;
+        fastHealCheck = data.getBoolean(ConfPaths.FIGHT_FASTHEAL_CHECK);
         fastHealInterval = data.getLong(ConfPaths.FIGHT_FASTHEAL_INTERVAL);
         fastHealBuffer = data.getLong(ConfPaths.FIGHT_FASTHEAL_BUFFER);
         fastHealActions = data.getOptimizedActionList(ConfPaths.FIGHT_FASTHEAL_ACTIONS, Permissions.FIGHT_FASTHEAL);

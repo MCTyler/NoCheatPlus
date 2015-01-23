@@ -67,13 +67,13 @@ public abstract class BlockCache {
     }
 
     /** Cached type-ids. */
-    private final CoordMap<Integer> idMap = new CoordMap<Integer>(23);
+    private final CoordMap<Integer> idMap = new CoordMap<>(23);
 
     /** Cached data values. */
-    private final CoordMap<Integer> dataMap = new CoordMap<Integer>(23);
+    private final CoordMap<Integer> dataMap = new CoordMap<>(23);
 
     /** Cached shape values. */
-    private final CoordMap<double[]> boundsMap = new CoordMap<double[]>(23);
+    private final CoordMap<double[]> boundsMap = new CoordMap<>(23);
 
     protected int maxBlockY =  255;
 
@@ -82,6 +82,7 @@ public abstract class BlockCache {
     public BlockCache() {
     }
 
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public BlockCache(final World world) {
         setAccess(world);
     }
@@ -145,9 +146,9 @@ public abstract class BlockCache {
 
     /**
      * (convenience method, uses cache).
-     * @param eX
-     * @param eY
-     * @param eZ
+     * @param x
+     * @param y
+     * @param z
      * @return
      */
     public int getTypeId(double x, double y, double z) {

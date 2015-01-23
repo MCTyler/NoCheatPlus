@@ -14,6 +14,7 @@ public class SelfHit extends Check {
 	public boolean check(final Player damager, final Player damaged, final FightData data, final FightConfig cc){
 		if (!damager.getName().equals(damaged.getName())) return false;
 		
+                @SuppressWarnings("UnusedAssignment")
 		boolean cancel = false;
 		// Treat self hitting as instant violation.
 		data.selfHitVL.add(System.currentTimeMillis(), 1.0f);

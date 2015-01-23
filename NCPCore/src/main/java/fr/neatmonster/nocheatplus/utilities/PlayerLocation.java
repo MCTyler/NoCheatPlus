@@ -287,7 +287,7 @@ public class PlayerLocation {
      */
     public boolean isAboveStairs() {
         if (aboveStairs == null) {
-            if (blockFlags != null && (blockFlags.longValue() & BlockProperties.F_STAIRS) == 0 ) {
+            if (blockFlags != null && (blockFlags & BlockProperties.F_STAIRS) == 0 ) {
                 aboveStairs = false;
                 return false;
             }
@@ -306,7 +306,7 @@ public class PlayerLocation {
      */
     public boolean isInLava() {
         if (inLava == null) {
-            if (blockFlags != null && (blockFlags.longValue() & BlockProperties.F_LAVA) == 0 ) {
+            if (blockFlags != null && (blockFlags & BlockProperties.F_LAVA) == 0 ) {
                 inLava = false;
                 return false;
             }
@@ -327,7 +327,7 @@ public class PlayerLocation {
      */
     public boolean isInWater() {
         if (inWater == null) {
-            if (blockFlags != null && (blockFlags.longValue() & BlockProperties.F_WATER) == 0 ) {
+            if (blockFlags != null && (blockFlags & BlockProperties.F_WATER) == 0 ) {
                 inWater = false;
                 return false;
             }
@@ -349,7 +349,7 @@ public class PlayerLocation {
      */
     public boolean isInLiquid() {
         // TODO: optimize (check liquid first and only if liquid check further)
-        if (blockFlags != null && (blockFlags.longValue() & BlockProperties.F_LIQUID) == 0 ) return false;
+        if (blockFlags != null && (blockFlags & BlockProperties.F_LIQUID) == 0 ) return false;
         // TODO: This should check for F_LIQUID too, Use a method that returns all found flags (!).
         return isInWater() || isInLava();
     }
@@ -363,7 +363,7 @@ public class PlayerLocation {
         if (onIce == null) {
             // TODO: Use a box here too ?
             // TODO: check if player is really sneaking (refactor from survivalfly to static access in Combined ?)!
-            if (blockFlags != null && (blockFlags.longValue() & BlockProperties.F_ICE) == 0) {
+            if (blockFlags != null && (blockFlags & BlockProperties.F_ICE) == 0) {
                 // TODO: check onGroundMinY !?
                 onIce = false;
             } else {
@@ -372,7 +372,7 @@ public class PlayerLocation {
                     id = getTypeId(blockX, Location.locToBlock(minY - 0.1D), blockZ);
                 }
                 else {
-                    id = getTypeIdBelow().intValue();
+                    id = getTypeIdBelow();
                 }
                 onIce = BlockProperties.isIce(id);
             }
@@ -388,7 +388,7 @@ public class PlayerLocation {
     public boolean isOnClimbable() {
         if (onClimbable == null) {
             // Climbable blocks.
-            if (blockFlags != null && (blockFlags.longValue() & BlockProperties.F_CLIMBABLE) == 0 ) {
+            if (blockFlags != null && (blockFlags & BlockProperties.F_CLIMBABLE) == 0 ) {
                 onClimbable = false;
                 return false;
             }
@@ -422,13 +422,7 @@ public class PlayerLocation {
                     }
                 }
             }
-            // Finally check possible jump height.
-            // TODO: This too is inaccurate.
-            if (isOnGround(jumpHeigth)) {
-                // Here ladders are ok.
-                return true;
-            }
-            return false;
+            return isOnGround(jumpHeigth);
         }
         return true;
     }
@@ -440,7 +434,7 @@ public class PlayerLocation {
      * @return If so.
      */
     public boolean isAboveLadder() {
-        if (blockFlags != null && (blockFlags.longValue() & BlockProperties.F_CLIMBABLE) == 0 ) return false;
+        if (blockFlags != null && (blockFlags & BlockProperties.F_CLIMBABLE) == 0 ) return false;
         // TODO: bounding box ?
         return (BlockProperties.getBlockFlags(getTypeIdBelow()) & BlockProperties.F_CLIMBABLE) != 0;
     }
@@ -473,7 +467,7 @@ public class PlayerLocation {
         else if (onGroundMinY <= yOnGround) onGround = true;
         else {
             // Shortcut check (currently needed for being stuck + sf).
-            if (blockFlags == null || (blockFlags.longValue() & BlockProperties.F_GROUND) != 0) {
+            if (blockFlags == null || (blockFlags & BlockProperties.F_GROUND) != 0) {
                 // TODO: Consider dropping this shortcut.
                 final int bY = Location.locToBlock(y - yOnGround);
                 final int id = bY == blockY ? getTypeId() : (bY == blockY -1 ? getTypeIdBelow() : blockCache.getTypeId(blockX,  bY, blockZ));
@@ -569,6 +563,7 @@ public class PlayerLocation {
             }
         }
         //      NCPAPIProvider.getNoCheatPlusAPI().getLogManager().debug(Streams.TRACE_FILE, "*** Fetch on-ground: yOnGround=" + yOnGround + " xzM=" + xzMargin + " yM=" + yMargin + " ign=" + ignoreFlags);
+        @SuppressWarnings("LocalVariableHidesMemberVariable")
         final boolean onGround = BlockProperties.isOnGround(blockCache, minX - xzMargin, minY - yOnGround - yMargin, minZ - xzMargin, maxX + xzMargin, minY + yMargin, maxZ + xzMargin, ignoreFlags);
         if (ignoreFlags == 0) {
             if (onGround) {
@@ -742,6 +737,7 @@ public class PlayerLocation {
      *            the location
      * @param player
      *            the player
+     * @param yOnGround
      * @throws NullPointerException, if Location.getWorld() returns null.
      */
     public void set(final Location location, final Player player, final double yOnGround)
@@ -839,9 +835,7 @@ public class PlayerLocation {
         if (spec != AlmostBoolean.MAYBE) {
             return spec.decide();
         }
-        else if (Math.abs(minX) > 3.2E7D || Math.abs(maxX) > 3.2E7D || Math.abs(minY) > 3.2E7D || Math.abs(maxY) > 3.2E7D || Math.abs(minZ) > 3.2E7D || Math.abs(maxZ) > 3.2E7D) return true;
-        // if (Math.abs(box.a) > 3.2E7D || Math.abs(box.b) > 3.2E7D || Math.abs(box.c) > 3.2E7D || Math.abs(box.d) > 3.2E7D || Math.abs(box.e) > 3.2E7D || Math.abs(box.f) > 3.2E7D) return true;
-        else return false;
+        else return Math.abs(minX) > 3.2E7D || Math.abs(maxX) > 3.2E7D || Math.abs(minY) > 3.2E7D || Math.abs(maxY) > 3.2E7D || Math.abs(minZ) > 3.2E7D || Math.abs(maxZ) > 3.2E7D;
     }
 
     /**

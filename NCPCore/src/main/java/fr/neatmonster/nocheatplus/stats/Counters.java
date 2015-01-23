@@ -18,7 +18,7 @@ import org.bukkit.Bukkit;
 public class Counters {
 	
 	/** Map strings for display/processing to "fast-access" ids. */
-	private final Map<String, Integer> idMap = new LinkedHashMap<String, Integer>();
+	private final Map<String, Integer> idMap = new LinkedHashMap<>();
 	
 	/** Keys by id. */
 	private String[] keys = new String[0];
@@ -35,13 +35,14 @@ public class Counters {
 	 * @param key
 	 * @return The id to be used for adding to counts.
 	 */
+        @SuppressWarnings("SynchronizeOnNonFinalField")
 	public int registerKey(String key) {
 		if (key == null) {
 			throw new NullPointerException("Key must not be null.");
 		}
 		Integer registeredId = idMap.get(key);
 		if (registeredId != null) {
-			return registeredId.intValue();
+			return registeredId;
 		}
 		final int newId = ptCounts.length;
 		idMap.put(key,  newId);
@@ -83,6 +84,7 @@ public class Counters {
 	 * @param id
 	 * @param count
 	 */
+        @SuppressWarnings("SynchronizeOnNonFinalField")
 	public void addSynchronized(int id, int count) {
 		synchronized (syCounts) {
 			syCounts[id] += count;
@@ -93,6 +95,7 @@ public class Counters {
 	 * Reset all counters to 0.<br>
 	 * Must only be called from the primary thread.
 	 */
+        @SuppressWarnings("SynchronizeOnNonFinalField")
 	public void resetAll() {
 		for (int i = 0; i < ptCounts.length; i ++) {
 			ptCounts[i] = 0;
@@ -105,7 +108,7 @@ public class Counters {
 	}
 	
 	public Map<String, Integer> getPrimaryThreadCounts() {
-		final Map<String, Integer> counts = new LinkedHashMap<String, Integer>();
+		final Map<String, Integer> counts = new LinkedHashMap<>();
 		final int length = keys.length;
 		for (int i = 0; i < length; i++) {
 			counts.put(keys[i], ptCounts[i]);
@@ -113,8 +116,10 @@ public class Counters {
 		return counts;
 	}
 	
+        @SuppressWarnings("SynchronizeOnNonFinalField")
 	public Map<String, Integer> getSynchronizedCounts() {
-		final Map<String, Integer> counts = new LinkedHashMap<String, Integer>();
+		final Map<String, Integer> counts = new LinkedHashMap<>();
+                @SuppressWarnings("LocalVariableHidesMemberVariable")
 		final int[] syCounts;
 		synchronized (this.syCounts) {
 			syCounts = Arrays.copyOf(this.syCounts, this.syCounts.length);
@@ -132,8 +137,10 @@ public class Counters {
 	 * 
 	 * @return
 	 */
+        @SuppressWarnings("SynchronizeOnNonFinalField")
 	public Map<String, Integer> getMergedCounts() {
-		final Map<String, Integer> counts = new LinkedHashMap<String, Integer>();
+		final Map<String, Integer> counts = new LinkedHashMap<>();
+                @SuppressWarnings("LocalVariableHidesMemberVariable")
 		final int[] syCounts;
 		synchronized (this.syCounts) {
 			syCounts = Arrays.copyOf(this.syCounts, this.syCounts.length);
@@ -161,7 +168,9 @@ public class Counters {
 	 */
 	public String getMergedCountsString(final boolean details) {
 		final StringBuilder builder = new StringBuilder(1024);
+                @SuppressWarnings("LocalVariableHidesMemberVariable")
 		final Map<String, Integer> syCounts = getSynchronizedCounts();
+                @SuppressWarnings("LocalVariableHidesMemberVariable")
 		final Map<String, Integer> ptCounts = getPrimaryThreadCounts();
 		builder.append('|');
 		for (final Entry<String, Integer> entry : ptCounts.entrySet()) {

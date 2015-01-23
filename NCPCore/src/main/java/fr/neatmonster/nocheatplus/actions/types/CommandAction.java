@@ -9,6 +9,8 @@ import fr.neatmonster.nocheatplus.logging.StaticLog;
 
 /**
  * Execute a command by imitating an administrator typing the command directly into the console.
+ * @param <D>
+ * @param <L>
  */
 public class CommandAction<D extends ParameterHolder, L extends AbstractActionList<D, L>> extends ActionWithParameters<D, L> {
 

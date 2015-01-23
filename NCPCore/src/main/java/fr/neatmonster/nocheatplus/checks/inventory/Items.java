@@ -15,6 +15,7 @@ public class Items extends Check{
     
     private static Items instance = null;
 
+    @SuppressWarnings("LeakingThisInConstructor")
     public Items() {
         super(CheckType.INVENTORY_ITEMS);
         instance = this;

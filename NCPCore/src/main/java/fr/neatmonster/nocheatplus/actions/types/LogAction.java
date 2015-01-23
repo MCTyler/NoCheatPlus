@@ -98,6 +98,7 @@ public class LogAction extends ActionWithParameters<ViolationData, ActionList> {
     @Override
     public boolean execute(final ViolationData violationData) {
         if (!violationData.player.hasPermission(violationData.getPermissionSilent())) {
+            @SuppressWarnings("LocalVariableHidesMemberVariable")
             final String message = super.getMessage(violationData);
             final LogManager logManager = NCPAPIProvider.getNoCheatPlusAPI().getLogManager();
             if (toChat) {
@@ -129,8 +130,11 @@ public class LogAction extends ActionWithParameters<ViolationData, ActionList> {
         if (!config.getBoolean(ConfPaths.LOGGING_ACTIVE)) {
             return null;
         }
+        @SuppressWarnings("LocalVariableHidesMemberVariable")
         final String prefixChat = filterPrefix(config, ConfPaths.LOGGING_BACKEND_INGAMECHAT_PREFIX, PREFIX_CHAT,  this.toChat && config.getBoolean(ConfPaths.LOGGING_BACKEND_INGAMECHAT_ACTIVE));
+        @SuppressWarnings("LocalVariableHidesMemberVariable")
         final String prefixConsole = filterPrefix(config, ConfPaths.LOGGING_BACKEND_CONSOLE_PREFIX, PREFIX_CONSOLE,  this.toConsole && config.getBoolean(ConfPaths.LOGGING_BACKEND_CONSOLE_ACTIVE));
+        @SuppressWarnings("LocalVariableHidesMemberVariable")
         final String prefixFile = filterPrefix(config, ConfPaths.LOGGING_BACKEND_FILE_PREFIX, PREFIX_FILE,  this.toFile && config.getBoolean(ConfPaths.LOGGING_BACKEND_FILE_ACTIVE));
         if (allNull(prefixChat, prefixConsole, prefixFile)) {
             return null;
@@ -139,15 +143,15 @@ public class LogAction extends ActionWithParameters<ViolationData, ActionList> {
     }
 
     private static boolean allNull(Object... objects) {
-        for (int i = 0; i < objects.length; i++) {
-            if (objects[i] != null) {
+        for (Object object : objects) {
+            if (object != null) {
                 return false;
             }
         }
         return true;
     }
 
-    private static final String filterPrefix(final ConfigFileWithActions<ViolationData, ActionList> config, final String path, final String defaultValue, final boolean use) {
+    private static String filterPrefix(final ConfigFileWithActions<ViolationData, ActionList> config, final String path, final String defaultValue, final boolean use) {
         if (!use) {
             return null;
         }

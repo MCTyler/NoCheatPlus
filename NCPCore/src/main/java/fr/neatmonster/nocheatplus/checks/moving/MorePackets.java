@@ -42,6 +42,8 @@ public class MorePackets extends Check {
 	 *            the from
 	 * @param to
 	 *            the to
+         * @param data
+         * @param cc
 	 * @return the location
 	 */
     public Location check(final Player player, final PlayerLocation from, final PlayerLocation to, final MovingData data, final MovingConfig cc) {

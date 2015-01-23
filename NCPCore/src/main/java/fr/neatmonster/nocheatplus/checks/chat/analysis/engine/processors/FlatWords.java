@@ -25,6 +25,7 @@ public class FlatWords extends DigestedWords{
 		public FlatWordsSettings(){
 			this.split = true;
 		}
+                @Override
 		public FlatWordsSettings applyConfig(ConfigFile config, String prefix){
 			super.applyConfig(config, prefix);
 			this.maxSize = config.getInt(prefix + "size", this.maxSize);

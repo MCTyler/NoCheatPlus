@@ -55,15 +55,15 @@ public class TickTask implements Runnable {
     /** Lock for accessing permissionUpdates. */
     private static final Object permissionLock = new Object();
     /** Permissions to update: player name -> check type. */
-    private static Set<PermissionUpdateEntry> permissionUpdates = new LinkedHashSet<PermissionUpdateEntry>(50);
+    private static Set<PermissionUpdateEntry> permissionUpdates = new LinkedHashSet<>(50);
 
     /** Lock for delayedActions. */
     private static final Object actionLock = new Object();
     /** Actions to execute. */
-    private static List<ViolationData> delayedActions = new LinkedList<ViolationData>();
+    private static List<ViolationData> delayedActions = new LinkedList<>();
 
     /** Tick listeners to call every tick. */
-    private static final Set<TickListener> tickListeners = new LinkedHashSet<TickListener>();
+    private static final Set<TickListener> tickListeners = new LinkedHashSet<>();
 
     /** Last n tick durations, measured from run to run.*/
     private static final long[] tickDurations = new long[lagMaxTicks];
@@ -75,10 +75,10 @@ public class TickTask implements Runnable {
     private static final long lagMaxCoveredMs = 50L * (1L + lagMaxTicks * (1L + lagMaxTicks));
 
     /** Lag spike durations (min) to keep track of. */
-    private static long[] spikeDurations = new long[]{150, 450, 1000, 5000};
+    private static final long[] spikeDurations = new long[]{150, 450, 1000, 5000};
 
     /** Lag spikes > 150 ms counting (3 x 20 minutes). For lag spike length see spikeDurations. */
-    private static ActionFrequency[] spikes = new ActionFrequency[spikeDurations.length];
+    private static final ActionFrequency[] spikes = new ActionFrequency[spikeDurations.length];
 
     /** Task id of the running TickTask */
     protected static int taskId = -1;
@@ -110,7 +110,7 @@ public class TickTask implements Runnable {
                 return;
             }
             copyActions = delayedActions;
-            delayedActions = new LinkedList<ViolationData>();
+            delayedActions = new LinkedList<>();
         }
         for (final ViolationData vd : copyActions) {
             vd.executeActions();
@@ -128,7 +128,7 @@ public class TickTask implements Runnable {
                 return;
             }
             copyPermissions = permissionUpdates;
-            permissionUpdates = new LinkedHashSet<PermissionUpdateEntry>(50);
+            permissionUpdates = new LinkedHashSet<>(50);
         }
         for (final PermissionUpdateEntry entry : copyPermissions) {
             final Player player = DataManager.getPlayer(entry.playerName); // Might use exact name by contract.
@@ -140,8 +140,7 @@ public class TickTask implements Runnable {
                 continue;
             }
             final ICheckData data = entry.checkType.getDataFactory().getData(player);
-            for (int j = 0; j < perms.length; j ++) {
-                final String permission = perms[j];
+            for (String permission : perms) {
                 data.setCachedPermission(permission, player.hasPermission(permission));
             }
         }
@@ -298,6 +297,7 @@ public class TickTask implements Runnable {
         else if (ms > lagMaxCoveredMs) {
             return getLag(lagMaxCoveredMs, exact);
         }
+        @SuppressWarnings("LocalVariableHidesMemberVariable")
         final int tick = TickTask.tick;
         if (tick == 0) {
             return 1f;
@@ -458,7 +458,7 @@ public class TickTask implements Runnable {
      * Notify all listeners. A copy of the listeners under lock, then processed without lock. Theoretically listeners can get processed though they have already been unregistered.
      * 
      */
-    private final void notifyListeners() {
+    private void notifyListeners() {
         // Copy for iterating, to allow reentrant registration while processing.
         final TickListener[] copyListeners;
         synchronized (tickListeners) {
@@ -471,8 +471,7 @@ public class TickTask implements Runnable {
             }
             copyListeners = tickListeners.toArray(new TickListener[tickListeners.size()]);
         } 
-        for (int i = 0; i < copyListeners.length; i++) {
-            final TickListener listener = copyListeners[i];
+        for (TickListener listener : copyListeners) {
             try{
                 listener.onTick(tick, timeLast);
             }

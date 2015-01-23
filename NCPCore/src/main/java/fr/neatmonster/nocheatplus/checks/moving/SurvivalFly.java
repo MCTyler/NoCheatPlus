@@ -69,10 +69,10 @@ public class SurvivalFly extends Check {
     private static final double bunnyDivFriction = 130.0;
 
     /** To join some tags with moving check violations. */
-    private final ArrayList<String> tags = new ArrayList<String>(15);
+    private final ArrayList<String> tags = new ArrayList<>(15);
 
 
-    private final Set<String> reallySneaking = new HashSet<String>(30);
+    private final Set<String> reallySneaking = new HashSet<>(30);
 
     /** For temporary use: LocUtil.clone before passing deeply, call setWorld(null) after use. */
     private final Location useLoc = new Location(null, 0, 0, 0);
@@ -94,6 +94,9 @@ public class SurvivalFly extends Check {
      * @param to
      *            the to
      * @param isSamePos 
+     * @param data 
+     * @param cc 
+     * @param now 
      * @return the location
      */
     public Location check(final Player player, final PlayerLocation from, final PlayerLocation to, final boolean isSamePos, final MovingData data, final MovingConfig cc, final long now) {
@@ -133,6 +136,7 @@ public class SurvivalFly extends Check {
         // Use the player-specific walk speed.
         // TODO: Might get from listener.
         // TODO: Use in lostground?
+        @SuppressWarnings("LocalVariableHidesMemberVariable")
         final double walkSpeed = SurvivalFly.walkSpeed * ((double) data.walkSpeed / 0.2);
 
         // Determine if the player is actually sprinting.
@@ -547,6 +551,7 @@ public class SurvivalFly extends Check {
         // TODO: Cleanup pending for what is applied when (check again).
         // TODO: re-arrange for fastest checks first (check vs. allowed distance
         // multiple times if necessary.
+        @SuppressWarnings("UnusedAssignment")
         double hAllowedDistance = 0D;
 
         final boolean sfDirty = data.sfDirty;
@@ -735,7 +740,7 @@ public class SurvivalFly extends Check {
      * @param tag Tag to be added in case of a violation of this sub-check.
      * @return A violation value > 0.001, to be interpreted like a moving violation.
      */
-    private static final double verticalAccounting(final double yDistance, final ActionAccumulator acc, final ArrayList<String> tags, final String tag) {
+    private static double verticalAccounting(final double yDistance, final ActionAccumulator acc, final ArrayList<String> tags, final String tag) {
         // TODO: distinguish near-ground moves somehow ?
         // Determine which buckets to check:
         // TODO: One state is checked 3 times vs. different yDiff !?
@@ -1323,7 +1328,7 @@ public class SurvivalFly extends Check {
      * @param cc
      * @return
      */
-    private final Location handleViolation(final long now, final double result, final Player player, final PlayerLocation from, final PlayerLocation to, final MovingData data, final MovingConfig cc)
+    private Location handleViolation(final long now, final double result, final Player player, final PlayerLocation from, final PlayerLocation to, final MovingData data, final MovingConfig cc)
     {
         // Increment violation level.
         data.survivalFlyVL += result;
@@ -1395,7 +1400,7 @@ public class SurvivalFly extends Check {
      * @param vDistanceAboveLimit
      * @return If to silently set back.
      */
-    private final boolean hackCobweb(final Player player, final MovingData data, final PlayerLocation to, 
+    private boolean hackCobweb(final Player player, final MovingData data, final PlayerLocation to, 
             final long now, final double vDistanceAboveLimit)
     {
         if (now - data.sfCobwebTime > 3000) {
@@ -1432,7 +1437,7 @@ public class SurvivalFly extends Check {
     /**
      * Determine "some jump amplifier": 1 is jump boost, 2 is jump boost II. <br>
      * NOTE: This is not the original amplifier value (use mcAccess for that).
-     * @param mcPlayer
+     * @param player
      * @return
      */
     protected final double getJumpAmplifier(final Player player) {
@@ -1463,25 +1468,25 @@ public class SurvivalFly extends Check {
         final String hBuf = (data.sfHorizontalBuffer < 1.0 ? ((" hbuf=" + StringUtil.fdec3.format(data.sfHorizontalBuffer))) : "");
         final String lostSprint = (data.lostSprintCount > 0 ? (" lostSprint=" + data.lostSprintCount) : "");
         final String hVelUsed = hFreedom > 0 ? " hVelUsed=" + StringUtil.fdec3.format(hFreedom) : "";
-        builder.append(player.getName() + " SurvivalFly\nground: " + (data.noFallAssumeGround ? "(assumeonground) " : "") + (fromOnGround ? "onground -> " : (resetFrom ? "resetcond -> " : "--- -> ")) + (toOnGround ? "onground" : (resetTo ? "resetcond" : "---")) + ", jumpphase: " + data.sfJumpPhase);
+        builder.append(player.getName()).append(" SurvivalFly\nground: ").append(data.noFallAssumeGround ? "(assumeonground) " : "").append(fromOnGround ? "onground -> " : (resetFrom ? "resetcond -> " : "--- -> ")).append(toOnGround ? "onground" : (resetTo ? "resetcond" : "---")).append(", jumpphase: ").append(data.sfJumpPhase);
         final String dHDist = (BuildParameters.debugLevel > 0 && data.sfLastHDist != Double.MAX_VALUE && Math.abs(data.sfLastHDist - hDistance) > 0.0005) ? ("(" + (hDistance > data.sfLastHDist ? "+" : "") + StringUtil.fdec3.format(hDistance - data.sfLastHDist) + ")") : "";
-        builder.append("\n" + " hDist: " + StringUtil.fdec3.format(hDistance) + dHDist + " / " +  StringUtil.fdec3.format(hAllowedDistance) + hBuf + lostSprint + hVelUsed + " , vDist: " +  StringUtil.fdec3.format(yDistance) + " (" + StringUtil.fdec3.format(to.getY() - data.getSetBackY()) + " / " +  StringUtil.fdec3.format(vAllowedDistance) + "), sby=" + (data.hasSetBack() ? data.getSetBackY() : "?"));
+        builder.append("\n" + " hDist: ").append(StringUtil.fdec3.format(hDistance)).append(dHDist).append(" / ").append(StringUtil.fdec3.format(hAllowedDistance)).append(hBuf).append(lostSprint).append(hVelUsed).append(" , vDist: ").append(StringUtil.fdec3.format(yDistance)).append(" (").append(StringUtil.fdec3.format(to.getY() - data.getSetBackY())).append(" / ").append(StringUtil.fdec3.format(vAllowedDistance)).append("), sby=").append(data.hasSetBack() ? data.getSetBackY() : "?");
         if (data.verticalVelocityCounter > 0 || data.verticalFreedom >= 0.001) {
-            builder.append("\n" + " vertical freedom: " +  StringUtil.fdec3.format(data.verticalFreedom) + " (vel=" +  StringUtil.fdec3.format(data.verticalVelocity) + "/counter=" + data.verticalVelocityCounter +"/used="+data.verticalVelocityUsed);
+            builder.append("\n" + " vertical freedom: ").append(StringUtil.fdec3.format(data.verticalFreedom)).append(" (vel=").append(StringUtil.fdec3.format(data.verticalVelocity)).append("/counter=").append(data.verticalVelocityCounter).append("/used=").append(data.verticalVelocityUsed);
         }
         //		if (data.horizontalVelocityCounter > 0 || data.horizontalFreedom >= 0.001) {
         //			builder.append("\n" + player.getName() + " horizontal freedom: " +  StringUtil.fdec3.format(data.horizontalFreedom) + " (counter=" + data.horizontalVelocityCounter +"/used="+data.horizontalVelocityUsed);
         //		}
         data.addHorizontalVelocity(builder);
         if (!resetFrom && !resetTo) {
-            if (cc.survivalFlyAccountingV && data.vDistAcc.count() > data.vDistAcc.bucketCapacity()) builder.append("\n" + " vacc=" + data.vDistAcc.toInformalString());
+            if (cc.survivalFlyAccountingV && data.vDistAcc.count() > data.vDistAcc.bucketCapacity()) builder.append("\n" + " vacc=").append(data.vDistAcc.toInformalString());
         }
         if (player.isSleeping()) tags.add("sleeping");
         if (player.getFoodLevel() <= 5 && player.isSprinting()) {
             // Exception: does not take into account latency.
             tags.add("lowfoodsprint");
         }
-        if (!tags.isEmpty()) builder.append("\n" + " tags: " + StringUtil.join(tags, "+"));
+        if (!tags.isEmpty()) builder.append("\n" + " tags: ").append(StringUtil.join(tags, "+"));
         builder.append("\n");
         //		builder.append(data.stats.getStatsStr(false));
         NCPAPIProvider.getNoCheatPlusAPI().getLogManager().debug(Streams.TRACE_FILE, builder.toString());

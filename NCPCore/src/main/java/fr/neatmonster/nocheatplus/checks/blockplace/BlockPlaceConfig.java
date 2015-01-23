@@ -72,6 +72,7 @@ public class BlockPlaceConfig extends ACheckConfig {
     public final ActionList fastPlaceActions;
 
     public final boolean    noSwingCheck;
+        @SuppressWarnings("SetReplaceableByEnumSet")
     public final Set<Material> noSwingExceptions = new HashSet<Material>();
     public final ActionList noSwingActions;
 

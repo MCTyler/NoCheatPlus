@@ -22,7 +22,7 @@ public class BlockFlags {
 	/**
 	 * Set flags of id same as already set with flags for the given material. (Uses BlockProperties.)
 	 * @param id
-	 * @param mat
+         * @param otherId
 	 */
 	public static void setFlagsAs(int id, int otherId) {
 		BlockProperties.setBlockFlags(id, BlockProperties.getBlockFlags(otherId));

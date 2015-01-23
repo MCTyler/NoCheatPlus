@@ -129,8 +129,8 @@ public class BlockBreakData extends ACheckData {
      * Meant to record the first click/damage on a block (not subsequent clicking), forces internals update.
      * @param block
      * @param tick
-     * @param now
-     * @param mat 
+     * @param now 
+     * @param tool 
      */
     public void setClickedBlock(Block block, int tick, long now, Material tool) {
         fastBreakfirstDamage = now;

@@ -39,7 +39,7 @@ public class Visible extends Check {
 		blockCache = mcAccess.getBlockCache(null);
 	}
 	
-	private static final double getEnd(final double[] bounds, final int index, final int mod){
+	private static double getEnd(final double[] bounds, final int index, final int mod){
 		if (bounds == null){
 			return 0.5 + (0.5 + offset) * mod;
 		}

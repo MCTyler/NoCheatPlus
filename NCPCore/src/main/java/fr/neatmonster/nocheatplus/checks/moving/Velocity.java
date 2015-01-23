@@ -74,6 +74,7 @@ public class Velocity {
 		this.valCount = valCount;
 	}
 	
+        @Override
 	public String toString(){
 		return "Velocity(tick=" + tick + " sum=" + sum + " value=" + value + " valid=" + valCount + " activate=" + actCount + ")";
 	}

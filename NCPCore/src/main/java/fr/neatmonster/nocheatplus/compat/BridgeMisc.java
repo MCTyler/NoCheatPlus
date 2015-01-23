@@ -28,20 +28,14 @@ public class BridgeMisc {
 
     /**
      * Return a shooter of a projectile if we get an entity, null otherwise.
+     * @param projectile
+     * @return 
      */
     public static Player getShooterPlayer(Projectile projectile) {
         Object source;
         try {
             source = projectile.getClass().getMethod("getShooter").invoke(projectile);
-        } catch (IllegalArgumentException e) {
-            return null;
-        } catch (SecurityException e) {
-            return null;
-        } catch (IllegalAccessException e) {
-            return null;
-        } catch (InvocationTargetException e) {
-            return null;
-        } catch (NoSuchMethodException e) {
+        } catch (IllegalArgumentException | SecurityException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             return null;
         }
         if (source instanceof Player) {
@@ -70,6 +64,7 @@ public class BridgeMisc {
      * Get online players as an array (convenience for reducing IDE markers :p).
      * @return
      */
+    @SuppressWarnings("SuspiciousToArrayCall")
     public static Player[] getOnlinePlayers() {
         Object obj = Bukkit.getOnlinePlayers();
         if (obj instanceof Collection<?>) {

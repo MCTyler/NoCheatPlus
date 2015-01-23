@@ -156,7 +156,7 @@ public class ChatListener extends CheckListener implements INotifyReload, JoinLe
         if (command != null) {
             messageVars.add("/" + command.getLabel().toLowerCase() + (split.length > 1 ? (" " + split[1]) : ""));
         }
-        if (alias.indexOf(":") != -1) {
+        if (alias.contains(":")) {
             final int index = message.indexOf(":") + 1;
             if (index < message.length()) {
                 checkMessage = message.substring(index);

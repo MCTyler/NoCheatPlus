@@ -96,7 +96,7 @@ public class MovingUtil {
 
     /**
      * Used for a workaround that resets the set-back for the case of jumping on just placed blocks.
-     * @param id
+     * @param blockType
      * @return
      */
     public static boolean canJumpOffTop(final Material blockType) {
@@ -136,8 +136,7 @@ public class MovingUtil {
         final Chunk toChunk = loc.getChunk();
         final Entity[] entities = toChunk.getEntities();
         MovingData untrackedData = null;
-        for (int i = 0; i < entities.length; i++) {
-            final Entity entity = entities[i];
+        for (Entity entity : entities) {
             if (entity.getType() != EntityType.PLAYER) {
                 continue;
             }
@@ -150,7 +149,7 @@ public class MovingUtil {
                 if (otherData.toX == Double.MAX_VALUE) {
                     // Data might have been removed.
                     // TODO: Consider counting as tracked?
-                    continue;
+
                 }
                 else if (TrigUtil.isSamePos(refLoc, otherData.toX, otherData.toY, otherData.toZ)) {
                     // Tracked.

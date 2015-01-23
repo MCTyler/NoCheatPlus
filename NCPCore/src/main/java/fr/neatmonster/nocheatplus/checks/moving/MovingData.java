@@ -47,7 +47,7 @@ public class MovingData extends ACheckData {
         }
     };
 
-    private static Map<String, MovingData> playersMap = new HashMap<String, MovingData>();
+    private static final Map<String, MovingData> playersMap = new HashMap<String, MovingData>();
     /** The map containing the data per players. */
 
     /**
@@ -275,6 +275,7 @@ public class MovingData extends ACheckData {
 
     /**
      * Move event: Mildly reset some data, prepare setting a new to-Location.
+     * @param loc
      */
     public void prepareSetBack(final Location loc) {
         clearAccounting();
@@ -325,6 +326,8 @@ public class MovingData extends ACheckData {
      * @param x
      * @param y
      * @param z
+     * @param yaw
+     * @param pitch
      */
     public void resetPositions(final double x, final double y, final double z, final float yaw, final float pitch) {
         fromX = toX = x;
@@ -751,6 +754,7 @@ public class MovingData extends ACheckData {
 
     /**
      * Convenience: Access method to simplify coding, being aware of some plugins using Player implementations as NPCs, leading to traces not being present.
+     * @param player
      * @return
      */
     public LocationTrace getTrace(final Player player) {
@@ -765,6 +769,7 @@ public class MovingData extends ACheckData {
      * Convenience
      * @param player
      * @param loc
+     * @param time
      */
     public void resetTrace(final Player player, final Location loc, final long time) {
         final MovingConfig cc = MovingConfig.getConfig(player);
@@ -779,6 +784,7 @@ public class MovingData extends ACheckData {
      * @return Updated LocationTrace instance, for convenient use, without sticking too much to MovingData.
      */
     public LocationTrace updateTrace(final Player player, final Location loc, final long time) {
+        @SuppressWarnings("LocalVariableHidesMemberVariable")
         final LocationTrace trace = getTrace(player);
         trace.addEntry(time, loc.getX(), loc.getY(), loc.getZ());
         return trace;
@@ -787,9 +793,9 @@ public class MovingData extends ACheckData {
     /**
      * Convenience: Create or just reset the trace, add the current location.
      * @param loc 
+     * @param time 
      * @param size
-     * @param mergeDist
-     * @param traceMergeDist 
+     * @param mergeDist 
      */
     public void resetTrace(final Location loc, final long time, final int size, double mergeDist) {
         if (trace == null || trace.getMaxSize() != size || trace.getMergeDist() != mergeDist) {
@@ -807,7 +813,6 @@ public class MovingData extends ACheckData {
     /**
      * Add velocity to internal book-keeping.
      * @param player
-     * @param data
      * @param cc
      * @param vx
      * @param vy

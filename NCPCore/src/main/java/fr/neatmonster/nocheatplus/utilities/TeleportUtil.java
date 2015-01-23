@@ -18,6 +18,7 @@ public class TeleportUtil {
      * @param vehicle
      * @param player
      * @param location
+     * @param debug
      */
     public static void teleport(final Entity vehicle, final Player player, final Location location, final boolean debug) {
         // TODO: This handling could conflict with WorldGuard region flags.

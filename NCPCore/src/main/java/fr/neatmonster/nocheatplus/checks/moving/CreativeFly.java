@@ -192,7 +192,7 @@ public class CreativeFly extends Check {
     private void outpuDebugMove(final Player player, final double hDistance, final double limitH, final double yDistance, final double verticalFreedom, final double limitV) {
         StringBuilder builder = new StringBuilder(350);
         builder.append(player.getName());
-        builder.append(" CreativeFly hdist=" + hDistance + " hlimit=" + limitH + " ydist=" + yDistance + " vfreedom=" + verticalFreedom + " vlimit=" + limitV);
+        builder.append(" CreativeFly hdist=").append(hDistance).append(" hlimit=").append(limitH).append(" ydist=").append(yDistance).append(" vfreedom=").append(verticalFreedom).append(" vlimit=").append(limitV);
         NCPAPIProvider.getNoCheatPlusAPI().getLogManager().debug(Streams.TRACE_FILE, builder.toString());
     }
 }

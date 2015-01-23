@@ -5,6 +5,8 @@ import fr.neatmonster.nocheatplus.config.ConfigFileWithActions;
 /**
  * An action gets executed as the result of a failed check. If it 'really' gets executed depends on how many executions
  * have occurred within the last 60 seconds and how much time was between this and the previous execution.
+ * @param <D>
+ * @param <L>
  */
 public abstract class Action <D extends ActionData, L extends AbstractActionList<D, L>>{
     /**

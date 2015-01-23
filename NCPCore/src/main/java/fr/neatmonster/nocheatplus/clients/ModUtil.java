@@ -47,8 +47,8 @@ public class ModUtil {
         final boolean allowAll = config.getBoolean(ConfPaths.PROTECT_CLIENTS_MOTD_ALLOWALL);
 
         String message = "";
-        for (int i = 0; i < motdS.length; i++){
-            message = motdS[i].onPlayerJoin(message, player, allowAll);
+        for (ClientMOTD motdS1 : motdS) {
+            message = motdS1.onPlayerJoin(message, player, allowAll);
         }
 
         if (!message.isEmpty()){

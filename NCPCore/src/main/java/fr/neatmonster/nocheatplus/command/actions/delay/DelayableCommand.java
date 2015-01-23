@@ -58,6 +58,7 @@ public abstract class DelayableCommand extends BaseCommand {
 	 * (Delay is not obligatory, inserted after the first argument.)
 	 * @param plugin
 	 * @param label
+         * @param permission
 	 */
 	public DelayableCommand(JavaPlugin plugin, String label, String permission){
 		this(plugin, label, permission, 1);
@@ -67,6 +68,7 @@ public abstract class DelayableCommand extends BaseCommand {
 	 * (Delay is not obligatory.)
 	 * @param plugin
 	 * @param label
+         * @param permission
 	 * @param delayIndex
 	 */
 	public DelayableCommand(JavaPlugin plugin, String label, String permission, int delayIndex){
@@ -77,7 +79,9 @@ public abstract class DelayableCommand extends BaseCommand {
 	 * 
 	 * @param plugin
 	 * @param label Sub command label.
+         * @param permission
 	 * @param delayIndex Index at which to look for the delay specification.
+         * @param delayPreset
 	 * @param mustHaveDelay If specifying a delay is obligatory.
 	 */
 	public DelayableCommand(JavaPlugin plugin, String label, String permission, int delayIndex, int delayPreset, boolean mustHaveDelay) {

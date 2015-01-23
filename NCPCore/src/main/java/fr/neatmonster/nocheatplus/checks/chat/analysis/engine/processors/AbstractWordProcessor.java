@@ -11,6 +11,7 @@ public abstract class AbstractWordProcessor implements WordProcessor{
 	
 	/**
 	 * Remove a number of entries from a map, in order of iteration over a key set.
+         * @param <K>
 	 * @param map
 	 * @param number Number of entries to remove.
 	 */
@@ -77,8 +78,10 @@ public abstract class AbstractWordProcessor implements WordProcessor{
 	
 	/**
 	 * Process one word.
-	 * @param index
-	 * @param message
+         * @param ts
+         * @param index
+         * @param key
+         * @param word
 	 * @return Score, suggested to be within [0 .. 1].
 	 */
 	public abstract float loop(final long ts, final int index, final String key, final WordLetterCount word);	

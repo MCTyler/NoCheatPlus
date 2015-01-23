@@ -48,6 +48,8 @@ public interface MCAccess {
 
     /**
      * Get height of an entity (attack relevant, the maximal "thing" found).
+     * @param entity
+     * @return 
      */
     public double  getHeight(Entity entity);
 
@@ -88,6 +90,7 @@ public interface MCAccess {
 
     /**
      * 
+     * @param player
      * @return Double.NEGATIVE_INFINITY if not present.
      */
     public double getFasterMovementAmplifier(Player player);

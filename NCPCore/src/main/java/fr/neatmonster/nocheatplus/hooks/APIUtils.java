@@ -2,28 +2,29 @@ package fr.neatmonster.nocheatplus.hooks;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
 import fr.neatmonster.nocheatplus.checks.CheckType;
+import java.util.EnumMap;
 
 /**
  * A class providing utilities to the NoCheatPlus API.
  * 
  * @author asofold
  */
+@SuppressWarnings("SetReplaceableByEnumSet")
 public class APIUtils {
 
     /** Only the children. */
-    private static final Map<CheckType, CheckType[]> childrenMap = new HashMap<CheckType, CheckType[]>();
+    private static final Map<CheckType, CheckType[]> childrenMap = new EnumMap<>(CheckType.class);
     
     /** Check including children, for convenient iteration. */
-    private static final Map<CheckType, CheckType[]> withChildrenMap = new HashMap<CheckType, CheckType[]>();
+    private static final Map<CheckType, CheckType[]> withChildrenMap = new EnumMap<>(CheckType.class);
 
     static {
-        final Map<CheckType, Set<CheckType>> map = new HashMap<CheckType, Set<CheckType>>();
+        final Map<CheckType, Set<CheckType>> map = new EnumMap<>(CheckType.class);
         for (final CheckType type : CheckType.values())
             map.put(type, new LinkedHashSet<CheckType>());
         for (final CheckType type : CheckType.values()){

@@ -34,6 +34,7 @@ public class NetStatic {
      *            time frames by setting them to this amount.
      * @param burstFreq Counting burst events, should be covering a minute or so.
      * @param burstPackets Packets in the first time window to add to burst count.
+     * @param burstDirect
      * @param burstEPM Events per minute to trigger a burst violation.
      * @param tags List to add tags to, for which parts of this check triggered a violation.
      * @return The violation amount, i.e. "count above limit", 0.0 if no violation.

@@ -29,7 +29,7 @@ public abstract class AsyncCheckData extends ACheckData {
     @Override
     public boolean hasCachedPermission(final String permission) {
         final Boolean has = cachedPermissions.get(permission);
-        return (has == null) ? false : has.booleanValue();
+        return (has == null) ? false : has;
     }
 
     @Override

@@ -9,6 +9,7 @@ public abstract class ACheckData implements ICheckData {
 
     public boolean debug; // TODO: Might make private.
     
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public ACheckData(ICheckConfig config) {
         setDebug(config.getDebug());
     }

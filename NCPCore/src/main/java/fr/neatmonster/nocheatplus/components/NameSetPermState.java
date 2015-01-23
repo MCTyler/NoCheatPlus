@@ -18,7 +18,7 @@ import java.util.Set;
 public class NameSetPermState implements PermStateReceiver{
 	
 	/** Map permission to player names (all exact case). */
-	protected final HashMap<String, Set<String>> playerSets = new HashMap<String, Set<String>>();
+	protected final HashMap<String, Set<String>> playerSets = new HashMap<>();
 	
 	protected String[] defaultPermissions;
 	
@@ -43,7 +43,7 @@ public class NameSetPermState implements PermStateReceiver{
 		Set<String> names = playerSets.get(permission);
 		if (names == null){
 			if (!state) return;
-			names = new LinkedHashSet<String>(20);
+			names = new LinkedHashSet<>(20);
 			playerSets.put(permission, names);
 		}
 		if (state) names.add(player);
@@ -73,7 +73,8 @@ public class NameSetPermState implements PermStateReceiver{
 	}
 	
 	public void addDefaultPermissions(Collection<String> permissions){
-		Collection<String> newDefaults = new HashSet<String>();
+                @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+		Collection<String> newDefaults = new HashSet<>();
 		newDefaults.addAll(Arrays.asList(this.defaultPermissions));
 		newDefaults.addAll(permissions);
 	}

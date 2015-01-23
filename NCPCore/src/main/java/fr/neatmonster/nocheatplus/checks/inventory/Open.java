@@ -27,6 +27,7 @@ public class Open extends Check implements DisableListener{
 		return instance.check(player);
 	}
 
+        @SuppressWarnings("LeakingThisInConstructor")
 	public Open() {
 		super(CheckType.INVENTORY_OPEN);
 		instance = this;

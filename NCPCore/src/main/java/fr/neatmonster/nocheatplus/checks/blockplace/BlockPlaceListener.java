@@ -39,7 +39,7 @@ public class BlockPlaceListener extends CheckListener {
 	private static final int p2 = 19349663;
 	private static final int p3 = 83492791;
 
-	private static final int getHash(final int x, final int y, final int z) {
+	private static int getHash(final int x, final int y, final int z) {
 		return p1 * x ^ p2 * y ^ p3 * z;
 	}
 	

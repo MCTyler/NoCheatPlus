@@ -299,7 +299,6 @@ public class InventoryListener  extends CheckListener implements JoinLeaveListen
                 && items.isEnabled(player)){
             event.setCancelled(true);
             counters.addPrimaryThread(idEggOnEntity, 1);
-            return;
         }
     }
 

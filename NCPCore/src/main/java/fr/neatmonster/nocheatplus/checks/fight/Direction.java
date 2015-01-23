@@ -27,8 +27,12 @@ public class Direction extends Check {
      * 
      * @param player
      *            the player
+     * @param loc
      * @param damaged
      *            the damaged
+     * @param dLoc
+     * @param data
+     * @param cc
      * @return true, if successful
      */
     public boolean check(final Player player, final Location loc, final Entity damaged, final Location dLoc, final FightData data, final FightConfig cc) {
@@ -93,6 +97,7 @@ public class Direction extends Check {
      * @param damagedLoc
      * @param data
      * @param cc
+     * @param sharedContext
      * @return
      */
     public DirectionContext getContext(final Player player, final Location loc, final Entity damaged, final Location damagedLoc, final FightData data, final FightConfig cc, final SharedContext sharedContext) {

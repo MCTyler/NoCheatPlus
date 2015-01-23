@@ -30,6 +30,8 @@ public class Angle extends Check {
      * @param player
      *            the player
      * @param worldChanged 
+     * @param data 
+     * @param cc 
      * @return true, if successful
      */
     public boolean check(final Player player, final boolean worldChanged, final FightData data, final FightConfig cc) {

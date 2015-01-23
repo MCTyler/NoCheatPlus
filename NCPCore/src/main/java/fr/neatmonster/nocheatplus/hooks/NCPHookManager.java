@@ -17,6 +17,8 @@ import org.bukkit.entity.Player;
 import fr.neatmonster.nocheatplus.checks.CheckType;
 import fr.neatmonster.nocheatplus.checks.ViolationData;
 import fr.neatmonster.nocheatplus.checks.access.IViolationInfo;
+import java.util.EnumMap;
+import java.util.logging.Level;
 
 /**
  * After-check-failure hook manager integrated into NoCheatPlus.
@@ -28,12 +30,12 @@ public final class NCPHookManager {
     private static int                                 maxHookId     = 0;
 
     /** Hook id to hook. */
-    private final static Map<Integer, NCPHook>         allHooks      = new HashMap<Integer, NCPHook>();
+    private final static Map<Integer, NCPHook>         allHooks      = new HashMap<>();
 
     /** Mapping the check types to the hooks. */
-    private static final Map<CheckType, List<NCPHook>> hooksByChecks = new HashMap<CheckType, List<NCPHook>>();
+    private static final Map<CheckType, List<NCPHook>> hooksByChecks = new EnumMap<>(CheckType.class);
     
-    private static Comparator<NCPHook> HookComparator = new Comparator<NCPHook>() {
+    private static final Comparator<NCPHook> HookComparator = new Comparator<NCPHook>() {
         @Override
         public int compare(final NCPHook o1, final NCPHook o2) {
             final boolean s1 = o1 instanceof IStats;
@@ -166,9 +168,8 @@ public final class NCPHookManager {
      *            the hooks
      * @return true, if a hook as decided to cancel the VL processing
      */
-    private static final boolean applyHooks(final CheckType checkType, final Player player, final IViolationInfo info, final List<NCPHook> hooks) {
-        for (int i = 0; i < hooks.size(); i++) {
-            final NCPHook hook = hooks.get(i);
+    private static boolean applyHooks(final CheckType checkType, final Player player, final IViolationInfo info, final List<NCPHook> hooks) {
+        for (NCPHook hook : hooks) {
             try {
                 if (hook.onCheckFailure(checkType, player, info) && !(hook instanceof IStats))
                     return true;
@@ -186,7 +187,7 @@ public final class NCPHookManager {
      * @return all the hooks
      */
     public static Collection<NCPHook> getAllHooks() {
-        final List<NCPHook> hooks = new LinkedList<NCPHook>();
+        final List<NCPHook> hooks = new LinkedList<>();
         hooks.addAll(allHooks.values());
         return hooks;
     }
@@ -198,7 +199,7 @@ public final class NCPHookManager {
      *            the hook
      * @return the hook description
      */
-    private static final String getHookDescription(final NCPHook hook) {
+    private static String getHookDescription(final NCPHook hook) {
         return hook.getHookName() + " [" + hook.getHookVersion() + "]";
     }
 
@@ -210,7 +211,7 @@ public final class NCPHookManager {
      * @return the collection of NCP hooks matching the hook name
      */
     public static Collection<NCPHook> getHooksByName(final String hookName) {
-        final List<NCPHook> hooks = new LinkedList<NCPHook>();
+        final List<NCPHook> hooks = new LinkedList<>();
         for (final Integer refId : allHooks.keySet()) {
             final NCPHook hook = allHooks.get(refId);
             if (hook.getHookName().equals(hookName) && !hooks.contains(hook))
@@ -259,8 +260,8 @@ public final class NCPHookManager {
      * @param hook
      *            the hook
      */
-    private static final void logHookAdded(final NCPHook hook) {
-        Bukkit.getLogger().info("[NoCheatPlus] Added hook: " + getHookDescription(hook) + ".");
+    private static void logHookAdded(final NCPHook hook) {
+        Bukkit.getLogger().log(Level.INFO, "[NoCheatPlus] Added hook: {0}.", getHookDescription(hook));
     }
 
     /**
@@ -275,19 +276,19 @@ public final class NCPHookManager {
      * @param throwable
      *            the throwable
      */
-    private static final void logHookFailure(final CheckType checkType, final Player player, final NCPHook hook,
+    private static void logHookFailure(final CheckType checkType, final Player player, final NCPHook hook,
             final Throwable t) {
         // TODO: might accumulate failure rate and only log every so and so seconds or disable hook if spamming (leads
         // to NCP spam though)?
         final StringBuilder builder = new StringBuilder(1024);
-        builder.append("[NoCheatPlus] Hook " + getHookDescription(hook) + " encountered an unexpected exception:\n");
+        builder.append("[NoCheatPlus] Hook ").append(getHookDescription(hook)).append(" encountered an unexpected exception:\n");
         builder.append("Processing: ");
         if (checkType.getParent() != null)
-            builder.append("Prent " + checkType.getParent() + " ");
-        builder.append("Check " + checkType);
-        builder.append(" Player " + player.getName());
+            builder.append("Prent ").append(checkType.getParent()).append(" ");
+        builder.append("Check ").append(checkType);
+        builder.append(" Player ").append(player.getName());
         builder.append("\n");
-        builder.append("Exception (" + t.getClass().getSimpleName() + "): " + t.getMessage() + "\n");
+        builder.append("Exception (").append(t.getClass().getSimpleName()).append("): ").append(t.getMessage()).append("\n");
         for (final StackTraceElement el : t.getStackTrace())
             builder.append(el.toString());
 
@@ -300,8 +301,8 @@ public final class NCPHookManager {
      * @param hook
      *            the hook
      */
-    private static final void logHookRemoved(final NCPHook hook) {
-        Bukkit.getLogger().info("[NoCheatPlus] Removed hook: " + getHookDescription(hook) + ".");
+    private static void logHookRemoved(final NCPHook hook) {
+        Bukkit.getLogger().log(Level.INFO, "[NoCheatPlus] Removed hook: {0}.", getHookDescription(hook));
     }
 
     /**
@@ -376,7 +377,7 @@ public final class NCPHookManager {
      * @return a set of the removed hooks ids, same order as the given collection (hooks).
      */
     public static Set<Integer> removeHooks(final Collection<NCPHook> hooks) {
-        final Set<Integer> ids = new LinkedHashSet<Integer>();
+        final Set<Integer> ids = new LinkedHashSet<>();
         for (final NCPHook hook : hooks) {
             final Integer id = removeHook(hook);
             if (id != null)
@@ -403,10 +404,7 @@ public final class NCPHookManager {
     /**
      * This is called by checks when players fail them.
      * 
-     * @param checkType
-     *            the check type
-     * @param player
-     *            the player that fails the check
+     * @param violationData
      * @return if we should cancel the VL processing
      */
     public static final boolean shouldCancelVLProcessing(final ViolationData violationData) {

@@ -19,6 +19,7 @@ public class WordPrefixes extends DigestedWords{
 			split = true;
 			compress = true;
 		}
+                @Override
 		public WordPrefixesSettings applyConfig(ConfigFile config, String prefix){
 			super.applyConfig(config, prefix);
 			this.maxAdd = config.getInt(prefix + "size", this.maxAdd);

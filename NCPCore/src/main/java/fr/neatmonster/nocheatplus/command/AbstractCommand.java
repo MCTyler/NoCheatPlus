@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
  * Base command class, featuring some features.<br>
  * Taken from the Archer plugin (@asofold), extended by aliases.
  * @author mc_dev
+ * @param <A>
  *
  */
 public abstract class AbstractCommand<A> implements TabExecutor{
@@ -40,6 +41,7 @@ public abstract class AbstractCommand<A> implements TabExecutor{
      * Convenience method.
      * @param args
      * @param startIndex
+     * @param sep
      * @return
      */
     public static String join(String[] args, int startIndex, String sep){
@@ -89,7 +91,7 @@ public abstract class AbstractCommand<A> implements TabExecutor{
     /** Permission necessary to use this command. May be null. */
     public final String permission;
     /** Sub commands for delegation. */
-    protected final Map<String, AbstractCommand<?>> subCommands = new LinkedHashMap<String, AbstractCommand<?>>();
+    protected final Map<String, AbstractCommand<?>> subCommands = new LinkedHashMap<>();
     /** The index in args to check for sub-commands. -1 stands for default, either parent + 1 or 0 */
     protected int subCommandIndex = -1;
     /** Aliases for the command label. */
@@ -141,9 +143,10 @@ public abstract class AbstractCommand<A> implements TabExecutor{
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
     {
-        final Set<String> choices = new LinkedHashSet<String>(subCommands.size());
+        final Set<String> choices = new LinkedHashSet<>(subCommands.size());
         int len = args.length;
         // Attempt to delegate.
+        @SuppressWarnings("LocalVariableHidesMemberVariable")
         int subCommandIndex = Math.max(0, this.subCommandIndex);
         if (len == subCommandIndex || len == subCommandIndex + 1){
             String arg = len == subCommandIndex ? "" : args[subCommandIndex].trim().toLowerCase();
@@ -163,13 +166,14 @@ public abstract class AbstractCommand<A> implements TabExecutor{
         }
         // No tab completion by default.
         if (choices.isEmpty()) return noTabChoices;
-        else return new LinkedList<String>(choices);
+        else return new LinkedList<>(choices);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String alias, String[] args)
     {
         int len = args.length;
+        @SuppressWarnings("LocalVariableHidesMemberVariable")
         int subCommandIndex = Math.max(0, this.subCommandIndex);
         if (len > subCommandIndex){
             String arg = args[subCommandIndex].trim().toLowerCase();
@@ -196,6 +200,9 @@ public abstract class AbstractCommand<A> implements TabExecutor{
      * Test if the CommandSender has the permission necessary to run THIS command (not meant for checking sub-command permissions recursively).
      * <br>Override for more complex specialized permissions.
      * @param sender
+     * @param command
+     * @param alias
+     * @param args
      * @return
      */
     public boolean testPermission(CommandSender sender, Command command, String alias, String args[]){

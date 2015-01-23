@@ -48,6 +48,7 @@ public class EnginePlayerDataMap extends ManagedMap<String, EnginePlayerData> {
 		return data;
 	}
 	
+        @Override
 	public void clear(){
 		final long time = System.currentTimeMillis();
 		for (final ValueWrap wrap : map.values()){

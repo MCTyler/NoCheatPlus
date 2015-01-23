@@ -24,33 +24,39 @@ public final class Timings {
 	}
 	
 	private long tsStats = 0;
-	private long periodStats = 12345;
-	private long nVerbose = 500;
+        @SuppressWarnings("FieldMayBeFinal")
+	private long periodStats;
+        @SuppressWarnings("FieldMayBeFinal")
+	private long nVerbose;
 	private long nDone = 0;
 	private boolean logStats = false;
 	private boolean showRange = true;
 	
-	private final Map<Integer, Entry> entries = new HashMap<Integer, Timings.Entry>();
+	private final Map<Integer, Entry> entries = new HashMap<>();
 	private final DecimalFormat f;
 	private final String label;
 	
 	/**
 	 * Map id to name.
 	 */
-	private final Map<Integer, String> idKeyMap = new HashMap<Integer, String>();
+	private final Map<Integer, String> idKeyMap = new HashMap<>();
 	
 	/**
 	 * Map exact name to id. 
 	 */
-	private final Map<String, Integer> keyIdMap = new HashMap<String, Integer>();
+	private final Map<String, Integer> keyIdMap = new HashMap<>();
 	
 	int maxId = 0;
 	
 	public Timings(){
 		this("[STATS]");
+        this.nVerbose = 500;
+        this.periodStats = 12345;
 	}
 	
 	public Timings(final String label){
+        this.nVerbose = 500;
+        this.periodStats = 12345;
 		this.label = label;
 		f = new DecimalFormat();
 		f.setGroupingUsed(true);
@@ -98,7 +104,7 @@ public final class Timings {
 	
 	public final String getStatsStr(final boolean colors) {
 		final StringBuilder b = new StringBuilder(400);
-		b.append(label+" ");
+		b.append(label).append(" ");
 		boolean first = true;
 		for (final Integer id : entries.keySet()){
 			if ( !first) b.append(" | ");
@@ -111,8 +117,8 @@ public final class Timings {
 				n = ChatColor.AQUA + n + ChatColor.WHITE;
 				av = ChatColor.YELLOW + av + ChatColor.WHITE;
 			}
-			b.append(key+" av="+av+" n="+n);
-			if ( showRange) b.append(" rg="+f.format(entry.min)+"..."+f.format(entry.max));
+			b.append(key).append(" av=").append(av).append(" n=").append(n);
+			if ( showRange) b.append(" rg=").append(f.format(entry.min)).append("...").append(f.format(entry.max));
 			first = false;
 		}
 		return b.toString();

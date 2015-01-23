@@ -90,6 +90,7 @@ public class BlockInteractData extends ACheckData {
     /**
      * Last interacted block.
      * @param block
+     * @param action
      */
     public void setLastBlock(Block block, Action action) {
         lastX = block.getX();

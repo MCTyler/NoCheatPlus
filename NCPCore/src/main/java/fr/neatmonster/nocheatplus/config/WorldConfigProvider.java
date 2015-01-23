@@ -8,6 +8,7 @@ import java.util.Collection;
  * <br>
  * This might be seen as a refactoring/structuring stage, leading to putting actions to NCPCompat as well. RawConfigFile might get changed.
  * @author mc_dev
+ * @param <C>
  *
  */
 public interface WorldConfigProvider <C extends RawConfigFile>{

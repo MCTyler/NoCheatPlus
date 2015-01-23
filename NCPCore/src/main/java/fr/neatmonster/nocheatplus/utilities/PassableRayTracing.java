@@ -36,6 +36,7 @@ public class PassableRayTracing extends RayTracing{
 		ignorefirst = false;
 	}
 	
+        @Override
 	public boolean collides(){
 		return collides;
 	}

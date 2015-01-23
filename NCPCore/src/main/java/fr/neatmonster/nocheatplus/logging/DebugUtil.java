@@ -56,7 +56,7 @@ public class DebugUtil {
     }
 
     public static void addLocation(final double x, final double y, final double z, final StringBuilder builder){
-        builder.append(x + ", " + y + ", " + z);
+        builder.append(x).append(", ").append(y).append(", ").append(z);
     }
 
     public static void addLocation(final Location loc, final StringBuilder builder){
@@ -68,7 +68,7 @@ public class DebugUtil {
     }
 
     public static void addFormattedLocation(final double x, final double y, final double z, final StringBuilder builder){
-        builder.append(StringUtil.fdec3.format(x) + ", " + StringUtil.fdec3.format(y) + ", " + StringUtil.fdec3.format(z));
+        builder.append(StringUtil.fdec3.format(x)).append(", ").append(StringUtil.fdec3.format(y)).append(", ").append(StringUtil.fdec3.format(z));
     }
 
     public static void addFormattedLocation(final Location loc, final StringBuilder builder){
@@ -119,7 +119,6 @@ public class DebugUtil {
      * @param to
      * @param loc Reference location for from, usually Player.getLocation(). May be null.
      * @param builder
-     * @return
      */
     public static void addFormattedMove(final PlayerLocation from, final PlayerLocation to, final Location loc, final StringBuilder builder){
         if (loc != null && !from.isSamePos(loc)){
@@ -152,7 +151,6 @@ public class DebugUtil {
      * @param to
      * @param loc Reference location for from, usually Player.getLocation().
      * @param builder
-     * @return
      */
     public static void addFormattedMove(final Location from, final Location to, final Location loc, final StringBuilder builder){
         if (loc != null && !isSamePos(from, loc)){
@@ -183,6 +181,7 @@ public class DebugUtil {
      * @param player
      * @param from
      * @param to
+     * @param maxYOnGround
      * @param mcAccess
      */
     public static void outputMoveDebug(final Player player, final PlayerLocation from, final PlayerLocation to, final double maxYOnGround, final MCAccess mcAccess) {
@@ -191,11 +190,11 @@ public class DebugUtil {
         // TODO: Differentiate debug levels (needs setting up some policy + document in BuildParamteres)?
         if (BuildParameters.debugLevel > 0) {
             builder.append("\n-------------- MOVE --------------\n");
-            builder.append(player.getName() + " " + from.getWorld().getName() + ":\n");
+            builder.append(player.getName()).append(" ").append(from.getWorld().getName()).append(":\n");
             addMove(from, to, loc, builder);
         }
         else {
-            builder.append(player.getName() + " " + from.getWorld().getName() + " ");
+            builder.append(player.getName()).append(" ").append(from.getWorld().getName()).append(" ");
             addFormattedMove(from, to, loc, builder);
         }
         final double jump = mcAccess.getJumpAmplifier(player);
@@ -204,10 +203,10 @@ public class DebugUtil {
         if (BuildParameters.debugLevel > 0){
             try{
                 // TODO: Check backwards compatibility (1.4.2). Remove try-catch
-                builder.append("\n(walkspeed=" + player.getWalkSpeed() + " flyspeed=" + player.getFlySpeed() + ")");
+                builder.append("\n(walkspeed=").append(player.getWalkSpeed()).append(" flyspeed=").append(player.getFlySpeed()).append(")");
             } catch (Throwable t){}
             final Vector v = player.getVelocity();
-            builder.append("(svel=" + v.getX() + "," + v.getY() + "," + v.getZ() + ")");
+            builder.append("(svel=").append(v.getX()).append(",").append(v.getY()).append(",").append(v.getZ()).append(")");
             if (player.isSprinting()){
                 builder.append("(sprinting)");
             }
@@ -216,13 +215,13 @@ public class DebugUtil {
             }
         }
         if (speed != Double.NEGATIVE_INFINITY){
-            builder.append("(e_speed=" + (speed + 1) + ")");
+            builder.append("(e_speed=").append(speed + 1).append(")");
         }
         if (jump != Double.NEGATIVE_INFINITY){
-            builder.append("(e_jump=" + (jump + 1) + ")");
+            builder.append("(e_jump=").append(jump + 1).append(")");
         }
         if (strider != 0){
-            builder.append("(e_depth_strider=" + strider + ")");
+            builder.append("(e_depth_strider=").append(strider).append(")");
         }
         // Print basic info first in order
         NCPAPIProvider.getNoCheatPlusAPI().getLogManager().debug(Streams.TRACE_FILE, builder.toString());
@@ -231,12 +230,12 @@ public class DebugUtil {
             builder.setLength(0);
             // Note: the block flags are for normal on-ground checking, not with yOnGrond set to 0.5.
             from.collectBlockFlags(maxYOnGround);
-            if (from.getBlockFlags() != 0) builder.append("\nfrom flags: " + StringUtil.join(BlockProperties.getFlagNames(from.getBlockFlags()), "+"));
+            if (from.getBlockFlags() != 0) builder.append("\nfrom flags: ").append(StringUtil.join(BlockProperties.getFlagNames(from.getBlockFlags()), "+"));
             if (from.getTypeId() != 0) addBlockInfo(builder, from, "\nfrom");
             if (from.getTypeIdBelow() != 0) addBlockBelowInfo(builder, from, "\nfrom");
             if (!from.isOnGround() && from.isOnGround(0.5)) builder.append(" (ground within 0.5)");
             to.collectBlockFlags(maxYOnGround);
-            if (to.getBlockFlags() != 0) builder.append("\nto flags: " + StringUtil.join(BlockProperties.getFlagNames(to.getBlockFlags()), "+"));
+            if (to.getBlockFlags() != 0) builder.append("\nto flags: ").append(StringUtil.join(BlockProperties.getFlagNames(to.getBlockFlags()), "+"));
             if (to.getTypeId() != 0) addBlockInfo(builder, to, "\nto");
             if (to.getTypeIdBelow() != 0) addBlockBelowInfo(builder, to, "\nto");
             if (!to.isOnGround() && to.isOnGround(0.5)) builder.append(" (ground within 0.5)");
@@ -246,11 +245,11 @@ public class DebugUtil {
     }
 
     public static  void addBlockBelowInfo(final StringBuilder builder, final PlayerLocation loc, final String tag) {
-        builder.append(tag + " below id=" + loc.getTypeIdBelow() + " data=" + loc.getData(loc.getBlockX(), loc.getBlockY() - 1, loc.getBlockZ()) + " shape=" + Arrays.toString(loc.getBlockCache().getBounds(loc.getBlockX(), loc.getBlockY() - 1, loc.getBlockZ())));
+        builder.append(tag).append(" below id=").append(loc.getTypeIdBelow()).append(" data=").append(loc.getData(loc.getBlockX(), loc.getBlockY() - 1, loc.getBlockZ())).append(" shape=").append(Arrays.toString(loc.getBlockCache().getBounds(loc.getBlockX(), loc.getBlockY() - 1, loc.getBlockZ())));
     }
 
     public static  void addBlockInfo(final StringBuilder builder, final PlayerLocation loc, final String tag) {
-        builder.append(tag + " id=" + loc.getTypeId() + " data=" + loc.getData() + " shape=" + Arrays.toString(loc.getBlockCache().getBounds(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())));
+        builder.append(tag).append(" id=").append(loc.getTypeId()).append(" data=").append(loc.getData()).append(" shape=").append(Arrays.toString(loc.getBlockCache().getBounds(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())));
     }
 
     /**
@@ -270,8 +269,8 @@ public class DebugUtil {
         final Entity actualVehicle = player.getVehicle();
         final boolean wrongVehicle = actualVehicle == null || actualVehicle.getEntityId() != vehicle.getEntityId();
         if (BuildParameters.debugLevel > 0) {
-            builder.append("\n-------------- VEHICLE MOVE " + (fake ? "(fake)" : "") + "--------------\n");
-            builder.append(player.getName() + " " + from.getWorld().getName() + ":\n");
+            builder.append("\n-------------- VEHICLE MOVE ").append(fake ? "(fake)" : "").append("--------------\n");
+            builder.append(player.getName()).append(" ").append(from.getWorld().getName()).append(":\n");
             addMove(from, to, null, builder);
             builder.append("\n Vehicle: ");
             addLocation(vLoc, builder);
@@ -279,14 +278,14 @@ public class DebugUtil {
             addLocation(loc, builder);
         }
         else {
-            builder.append(player.getName() + " " + from.getWorld().getName() + "veh." + (fake ? "(fake)" : "") + " ");
+            builder.append(player.getName()).append(" ").append(from.getWorld().getName()).append("veh.").append(fake ? "(fake)" : "").append(" ");
             addFormattedMove(from, to, null, builder);
             builder.append("\n Vehicle: ");
             addFormattedLocation(vLoc, builder);
             builder.append(" Player: ");
             addFormattedLocation(loc, builder);
         }
-        builder.append("\n Vehicle type: " + vehicle.getType() + (wrongVehicle ? (actualVehicle == null ? " (exited?)" : " actual: " + actualVehicle.getType()) : ""));
+        builder.append("\n Vehicle type: ").append(vehicle.getType()).append(wrongVehicle ? (actualVehicle == null ? " (exited?)" : " actual: " + actualVehicle.getType()) : "");
         NCPAPIProvider.getNoCheatPlusAPI().getLogManager().debug(Streams.TRACE_FILE, builder.toString());
     }
 

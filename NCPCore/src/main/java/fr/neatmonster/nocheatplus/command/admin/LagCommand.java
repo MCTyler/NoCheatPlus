@@ -25,10 +25,10 @@ public class LagCommand extends BaseCommand {
 		int[] spikes = TickTask.getLagSpikes();
 		builder.append("#### Lag spikes ####\n");	
 		if (spikes[0] == 0){
-			builder.append("No spikes > " + spikeDurations[0] + " ms within the last 40 to 60 minutes.");
+			builder.append("No spikes > ").append(spikeDurations[0]).append(" ms within the last 40 to 60 minutes.");
 		}
 		else if (spikes[0] > 0){
-			builder.append("Total: " + spikes[0] + " > " + spikeDurations[0] + " ms within the last 40 to 60 minutes.");
+			builder.append("Total: ").append(spikes[0]).append(" > ").append(spikeDurations[0]).append(" ms within the last 40 to 60 minutes.");
 			builder.append("\n| ");
 			for (int i = 0; i < spikeDurations.length; i++){
 				if (i < spikeDurations.length - 1 && spikes[i] == spikes[i + 1]){
@@ -36,13 +36,14 @@ public class LagCommand extends BaseCommand {
 					continue;
 				}
 				if (spikes[i] == 0){
-					continue; // Could be break.
+                                    // Could be break.
+                                    
 				}
 				else if (i < spikeDurations.length - 1){
-					builder.append((spikes[i] - spikes[i + 1]) + "x" + spikeDurations[i] + "..." + spikeDurations[i + 1] + " | ");
+					builder.append(spikes[i] - spikes[i + 1]).append("x").append(spikeDurations[i]).append("...").append(spikeDurations[i + 1]).append(" | ");
 				}
 				else{
-					builder.append(spikes[i] + "x" + spikeDurations[i] +"... | ");
+					builder.append(spikes[i]).append("x").append(spikeDurations[i]).append("... | ");
 				}
 			}
 		}
@@ -55,7 +56,7 @@ public class LagCommand extends BaseCommand {
 		for (long ms : new long[]{second, medium, max}){
 			double lag = TickTask.getLag(ms, true);
 			int p = Math.max(0, (int) ((lag - 1.0) * 100.0));
-			builder.append(" " + p + "%[" + StringUtil.fdec1.format((double) ms / 1200.0) + "s]" );
+			builder.append(" ").append(p).append("%[").append(StringUtil.fdec1.format((double) ms / 1200.0)).append("s]");
 		}
 		// Send message.
 		sender.sendMessage(builder.toString());

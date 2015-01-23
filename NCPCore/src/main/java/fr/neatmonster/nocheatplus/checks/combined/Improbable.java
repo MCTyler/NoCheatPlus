@@ -23,8 +23,9 @@ public class Improbable extends Check implements DisableListener{
 	/**
 	 * Return if t cancel.
 	 * @param player
-	 * @param weights
+         * @param weight
 	 * @param now
+         * @param tags
 	 * @return
 	 */
 	public static final boolean check(final Player player, final float weight, final long now, final String tags){
@@ -45,6 +46,7 @@ public class Improbable extends Check implements DisableListener{
 	// Instance methods.
 	///////////////////////////////////
 	
+        @SuppressWarnings("LeakingThisInConstructor")
 	public Improbable() {
 		super(CheckType.COMBINED_IMPROBABLE);
 		instance = this;

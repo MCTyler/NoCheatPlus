@@ -1,7 +1,6 @@
 package fr.neatmonster.nocheatplus.hooks;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -10,6 +9,7 @@ import java.util.UUID;
 import org.bukkit.entity.Player;
 
 import fr.neatmonster.nocheatplus.checks.CheckType;
+import java.util.EnumMap;
 
 /**
  * API for exempting players of checks, checked before calculations are done.
@@ -19,7 +19,7 @@ import fr.neatmonster.nocheatplus.checks.CheckType;
 public class NCPExemptionManager {
 
     /** A map associating a check type with the unique ids of its exempted players. */
-    private static final Map<CheckType, Set<UUID>> exempted          = new HashMap<CheckType, Set<UUID>>();
+    private static final Map<CheckType, Set<UUID>> exempted          = new EnumMap<>(CheckType.class);
 
     static {
         clear();
@@ -42,8 +42,7 @@ public class NCPExemptionManager {
     /**
      * Exempt an entity from all checks permanently.
      * 
-     * @param entityId
-     *            the entity id
+     * @param id
      */
     public static final void exemptPermanently(final UUID id) {
         exemptPermanently(id, CheckType.ALL);
@@ -52,8 +51,7 @@ public class NCPExemptionManager {
     /**
      * Exempt an entity from the given check or check group permanently (only until restart).
      * 
-     * @param entityId
-     *            the entity id
+     * @param id
      * @param checkType
      *            the check type
      */
@@ -92,8 +90,7 @@ public class NCPExemptionManager {
      * This might help exempting NPCs from checks for all time, making performance a lot better. A future purpose might
      * be to exempt vehicles and similar (including passengers) from checks.
      * 
-     * @param entityId
-     *            the entity id to exempt from checks
+     * @param id
      * @param checkType
      *            the type of check to exempt the player from. This can be individual check types, as well as a check
      *            group like MOVING or ALL
@@ -130,8 +127,7 @@ public class NCPExemptionManager {
     /**
      * Undo exempting an entity from a certain check, or check group, as given.
      * 
-     * @param entityId
-     *            the entity id
+     * @param id
      * @param checkType
      *            the check type
      */

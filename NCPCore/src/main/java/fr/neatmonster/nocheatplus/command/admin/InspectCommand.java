@@ -58,16 +58,16 @@ public class InspectCommand extends BaseCommand {
     public static String getInspectMessage(final Player player, final ChatColor contentColor) {
         final String c1 = contentColor == null ? "" : contentColor.toString();
         final StringBuilder builder = new StringBuilder(256);
-        builder.append(player.getName() + c1);
-        builder.append(" (" + (player.isOnline() ? "online" : "offline") + "," + (player.isOp() ? "!OP!," : "") + player.getGameMode() + (player.isDead() ? ",dead" : "") + (player.isValid() ? "" : ",invalid") + (player.isInsideVehicle() ? (",vehicle=" + player.getVehicle().getType() + "@" + locString(player.getVehicle().getLocation())) : "")+ "):");
+        builder.append(player.getName()).append(c1);
+        builder.append(" (").append(player.isOnline() ? "online" : "offline").append(",").append(player.isOp() ? "!OP!," : "").append(player.getGameMode()).append(player.isDead() ? ",dead" : "").append(player.isValid() ? "" : ",invalid").append(player.isInsideVehicle() ? (",vehicle=" + player.getVehicle().getType() + "@" + locString(player.getVehicle().getLocation())) : "").append("):");
         // TODO: isValid, isDead,  isInsideVehicle ...
         // Health.
-        builder.append(" health=" + f1.format(BridgeHealth.getHealth(player)) + "/" + f1.format(BridgeHealth.getMaxHealth(player)));
+        builder.append(" health=").append(f1.format(BridgeHealth.getHealth(player))).append("/").append(f1.format(BridgeHealth.getMaxHealth(player)));
         // Food.
-        builder.append(" food=" + player.getFoodLevel());
+        builder.append(" food=").append(player.getFoodLevel());
         // Exp.
         if (player.getExp() > 0f) {
-            builder.append(" explvl=" + f1.format(player.getExpToLevel()) + "(exp=" + f1.format(player.getExp()) + ")");
+            builder.append(" explvl=").append(f1.format(player.getExpToLevel())).append("(exp=").append(f1.format(player.getExp())).append(")");
         }
         // Fly settings.
         if (player.isFlying()) {
@@ -77,24 +77,24 @@ public class InspectCommand extends BaseCommand {
             builder.append(" allowflight");
         }
         // Speed settings.
-        builder.append(" flyspeed=" + player.getFlySpeed());
-        builder.append(" walkspeed=" + player.getWalkSpeed());
+        builder.append(" flyspeed=").append(player.getFlySpeed());
+        builder.append(" walkspeed=").append(player.getWalkSpeed());
         // Potion effects.
         final Collection<PotionEffect> effects = player.getActivePotionEffects();
         if (!effects.isEmpty()) {
             builder.append(" effects=");
             for (final PotionEffect effect : effects) {
-                builder.append(effect.getType() + "@" + effect.getAmplifier() +",");
+                builder.append(effect.getType()).append("@").append(effect.getAmplifier()).append(",");
             }
         }
         // TODO: is..sneaking,sprinting,blocking,
         // Finally the block location.
         final Location loc = player.getLocation();
-        builder.append(" pos=" + locString(loc));
+        builder.append(" pos=").append(locString(loc));
         return builder.toString();
     }
 
-    private static final String locString(Location loc) {
+    private static String locString(Location loc) {
         return loc.getWorld().getName() + "/" + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
     }
 

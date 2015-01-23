@@ -26,7 +26,7 @@ public class CheckUtils {
     /**
      * Guess some last-action time, likely to be replaced with centralized PlayerData use.
      * @param player
-     * @param Timestamp of the moment of calling this.
+     * @param now
      * @param maxAge Maximum age in milliseconds.
      * @return Return timestamp or Long.MIN_VALUE if not possible or beyond maxAge.
      */

@@ -35,6 +35,7 @@ public abstract class AbstractActionList<D extends ActionData,  L extends Abstra
      * 
      * @param permissionSilent
      *            the permission
+     * @param listFactory
      */
     public AbstractActionList(final String permissionSilent, final ActionListFactory<D, L> listFactory) {
         this.listFactory = listFactory;

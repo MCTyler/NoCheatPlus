@@ -51,7 +51,7 @@ public class BlockInit {
         }
         String name = mat.name().toLowerCase();
         for (String part : parts) {
-            if (name.indexOf(part.toLowerCase()) < 0) {
+            if (!name.contains(part.toLowerCase())) {
                 throw new RuntimeException("Name for Material " + id + " ('" + mat.name() + "') should contain '" + part + "'.");
             }
         }
@@ -69,7 +69,7 @@ public class BlockInit {
     /**
      * Set block breaking properties same as the block of the given id.
      * @param newId
-     * @param mat
+     * @param otherId
      */
     public static void setPropsAs(int newId, int otherId) {
         BlockProperties.setBlockProps(newId, BlockProperties.getBlockProps(otherId));
@@ -88,7 +88,7 @@ public class BlockInit {
     /**
      * Set block breaking and shape properties same as the block of the given id.
      * @param newId
-     * @param mat
+     * @param otherId
      */
     public static void setAs(int newId, int otherId) {
         BlockFlags.setFlagsAs(newId, otherId);

@@ -33,7 +33,7 @@ public class MovingConfig extends ACheckConfig {
     };
 
     /** The map containing the configurations per world. */
-    private static final Map<String, MovingConfig> worldsMap = new HashMap<String, MovingConfig>();
+    private static final Map<String, MovingConfig> worldsMap = new HashMap<>();
 
     /**
      * Clear all the configurations.

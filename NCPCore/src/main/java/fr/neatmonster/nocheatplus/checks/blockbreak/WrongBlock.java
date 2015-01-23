@@ -45,13 +45,8 @@ public class WrongBlock extends Check {
         	wrongBlock = false;
         }
         else if (dist == 1) {
-        	// One might to a concession in case of instant breaking.
-        	if (now - data.wasInstaBreak < 60) {
-        		wrongBlock = false;
-        	}
-        	else {
-        		wrongBlock = true;
-        	}
+            // One might to a concession in case of instant breaking.
+            wrongBlock = now - data.wasInstaBreak >= 60;
         }
         else {
         	// Note that the maximally counted distance is set above.

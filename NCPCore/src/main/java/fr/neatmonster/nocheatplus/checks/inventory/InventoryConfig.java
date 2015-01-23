@@ -72,6 +72,7 @@ public class InventoryConfig extends ACheckConfig {
     public final boolean    fastConsumeCheck;
     public final long		fastConsumeDuration;
     public final boolean    fastConsumeWhitelist;
+    @SuppressWarnings("SetReplaceableByEnumSet")
     public final Set<Material> fastConsumeItems = new HashSet<Material>();
     public final ActionList fastConsumeActions;
 

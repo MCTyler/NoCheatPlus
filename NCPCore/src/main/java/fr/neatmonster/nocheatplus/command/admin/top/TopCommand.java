@@ -46,7 +46,7 @@ public class TopCommand extends BaseCommand{
         private final int n;
         private final Plugin plugin;
         public PrimaryThreadWorker(CommandSender sender, Collection<CheckType> checkTypes, Comparator<VLView> comparator, int n, Plugin plugin) {
-            this.checkTypes = new LinkedHashSet<CheckType>(checkTypes);
+            this.checkTypes = new LinkedHashSet<>(checkTypes);
             this.sender = sender;
             this.comparator = comparator;
             this.n = n;
@@ -114,10 +114,10 @@ public class TopCommand extends BaseCommand{
             }
             int done = 0;
             for (final VLView view : views) {
-                builder.append(" " + c1);
+                builder.append(" ").append(c1);
                 builder.append(view.name);
                 // Details
-                builder.append(c2 + "(");
+                builder.append(c2).append("(");
                 // sum
                 builder.append("sum=");
                 builder.append(format.format(view.sumVL));
@@ -137,7 +137,7 @@ public class TopCommand extends BaseCommand{
                 }
             }
             if (views.isEmpty()) {
-                builder.append(c1 + "Nothing to display.");
+                builder.append(c1).append("Nothing to display.");
             }
             final String message = builder.toString();
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
@@ -181,7 +181,7 @@ public class TopCommand extends BaseCommand{
             n = 10000;
         }
         
-        Set<CheckType> checkTypes = new LinkedHashSet<CheckType>();
+        Set<CheckType> checkTypes = new LinkedHashSet<>();
         for (int i = startIndex; i < args.length; i ++) {
             CheckType type = null;
             try {
@@ -199,7 +199,7 @@ public class TopCommand extends BaseCommand{
         Comparator<VLView> comparator = VLView.parseMixedComparator(args, startIndex);
         if (comparator == null) {
             // TODO: Default comparator ?
-            comparator = new FCFSComparator<VLView>(Arrays.asList(VLView.CmpnVL, VLView.CmpSumVL), true);
+            comparator = new FCFSComparator<>(Arrays.asList(VLView.CmpnVL, VLView.CmpSumVL), true);
         }
         
         // Run a worker task.

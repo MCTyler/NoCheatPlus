@@ -70,11 +70,7 @@ public abstract class DigestedWords extends AbstractWordProcessor{
 	
 	/**
 	 * 
-	 * @param durExpire
-	 * @param maxAdd
-	 * @param sort Sort letters.
-	 * @param compress Only use every letter once.
-	 * @param split Check for letters, digits, other individually (!).
+         * @param name
 	 */
 	public DigestedWords(String name) {
 		super(name);

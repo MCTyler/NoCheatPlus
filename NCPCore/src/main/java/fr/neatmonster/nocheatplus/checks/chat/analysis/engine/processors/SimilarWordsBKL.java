@@ -22,6 +22,7 @@ public class SimilarWordsBKL extends DigestedWords {
 			split = true;
 			compress = true;
 		}
+                @Override
 		public SimilarWordsBKLSettings applyConfig(ConfigFile config, String  prefix){
 			super.applyConfig(config, prefix);
 			this.range = config.getInt(prefix + "range", this.range);

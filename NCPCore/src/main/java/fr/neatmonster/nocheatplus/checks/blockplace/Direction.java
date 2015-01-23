@@ -29,10 +29,10 @@ public class Direction extends Check {
      * 
      * @param player
      *            the player
+     * @param placed
+     * @param against
      * @param data 
-     * @param cc 
-     * @param location
-     *            the location
+     * @param cc
      * @return true, if successful
      */
     public boolean check(final Player player, final Block placed, final Block against, final BlockPlaceData data, final BlockPlaceConfig cc) {

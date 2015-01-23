@@ -29,16 +29,20 @@ public enum AlmostBoolean{
             return null;
         }
         input = input.trim().toLowerCase();
-        if (input.equals("true") || input.equals("yes") || input.equals("y")) {
-            return AlmostBoolean.YES;
-        }
-        else if (input.equals("false") || input.equals("no") || input.equals("n")) {
-            return AlmostBoolean.NO;
-        }
-        else if (input.equals("default") || input.equals("maybe")) {
-            return AlmostBoolean.MAYBE;
-        } else {
-            return null;
+        switch (input) {
+            case "true":
+            case "yes":
+            case "y":
+                return AlmostBoolean.YES;
+            case "false":
+            case "no":
+            case "n":
+                return AlmostBoolean.NO;
+            case "default":
+            case "maybe":
+                return AlmostBoolean.MAYBE;
+            default:
+                return null;
         }
     }
 

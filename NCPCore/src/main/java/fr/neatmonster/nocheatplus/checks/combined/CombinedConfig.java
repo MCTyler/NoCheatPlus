@@ -21,6 +21,7 @@ import fr.neatmonster.nocheatplus.config.ConfigManager;
 import fr.neatmonster.nocheatplus.logging.StaticLog;
 import fr.neatmonster.nocheatplus.permissions.Permissions;
 import fr.neatmonster.nocheatplus.utilities.StringUtil;
+import java.util.EnumMap;
 
 public class CombinedConfig extends ACheckConfig {
 	
@@ -62,8 +63,9 @@ public class CombinedConfig extends ACheckConfig {
 	// Invulnerable management.
 	public final boolean                    invulnerableCheck;
     public final int                        invulnerableInitialTicksJoin;
+        @SuppressWarnings("SetReplaceableByEnumSet")
     public final Set<DamageCause>           invulnerableIgnore = new HashSet<DamageCause>();
-    public final Map<DamageCause, Integer>  invulnerableModifiers = new HashMap<DamageCause, Integer>();
+    public final Map<DamageCause, Integer>  invulnerableModifiers = new EnumMap<DamageCause, Integer>(DamageCause.class);
     public final int                        invulnerableModifierDefault;
     public final boolean                    invulnerableTriggerAlways;
     public final boolean                    invulnerableTriggerFallDistance;

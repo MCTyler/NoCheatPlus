@@ -36,6 +36,9 @@ public class Critical extends Check {
      * 
      * @param player
      *            the player
+     * @param loc
+     * @param data
+     * @param cc
      * @return true, if successful
      */
     public boolean check(final Player player, final Location loc, final FightData data, final FightConfig cc) {

@@ -26,6 +26,7 @@ public class FastPlace extends Check {
      *            the player
      * @param block
      *            the block
+     * @param data
      * @param cc 
      * @return true, if successful
      */

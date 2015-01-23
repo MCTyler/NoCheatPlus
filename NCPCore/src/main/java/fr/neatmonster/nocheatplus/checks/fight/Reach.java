@@ -49,8 +49,12 @@ public class Reach extends Check {
      * 
      * @param player
      *            the player
+     * @param pLoc
      * @param damaged
      *            the damaged
+     * @param dRef
+     * @param data
+     * @param cc
      * @return true, if successful
      */
     public boolean check(final Player player, final Location pLoc, final Entity damaged, final Location dRef, final FightData data, final FightConfig cc) {
@@ -143,6 +147,7 @@ public class Reach extends Check {
      * @param damagedLoc
      * @param data
      * @param cc
+     * @param sharedContext
      * @return
      */
     public ReachContext getContext(final Player player, final Location pLoc, final Entity damaged, final Location damagedLoc, final FightData data, final FightConfig cc, final SharedContext sharedContext) {

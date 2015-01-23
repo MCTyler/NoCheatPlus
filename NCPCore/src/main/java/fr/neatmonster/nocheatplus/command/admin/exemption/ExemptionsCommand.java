@@ -35,7 +35,7 @@ public class ExemptionsCommand extends BaseCommand {
         } else {
             id = DataManager.getUUID(playerName);
         }
-        final List<String> entries = new LinkedList<String>();
+        final List<String> entries = new LinkedList<>();
         if (id == null) {
             sender.sendMessage(TAG + "Not online nor a UUID: " + playerName);
             return true;

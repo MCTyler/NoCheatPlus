@@ -7,6 +7,8 @@ import fr.neatmonster.nocheatplus.actions.ActionData;
 /**
  * Do something check-specific. Usually that is to cancel the event, undo something the player did, or do something the
  * server should've done.
+ * @param <D>
+ * @param <L>
  */
 public class CancelAction<D extends ActionData, L extends AbstractActionList<D, L>> extends Action<D, L> {
 

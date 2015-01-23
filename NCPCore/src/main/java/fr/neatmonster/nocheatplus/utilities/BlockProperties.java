@@ -100,6 +100,7 @@ public class BlockProperties {
             this.toolType = toolType;
             this.materialBase = materialBase;
         }
+        @Override
         public String toString() {
             return "ToolProps("+toolType + "/"+materialBase+")";
         }
@@ -155,6 +156,7 @@ public class BlockProperties {
             this.hardness = hardness;
             this.efficiencyMod = efficiencyMod;
         }
+        @Override
         public String toString() {
             return "BlockProps(" + hardness + " / " + tool.toString() + " / " + Arrays.toString(breakingTimes) + ")";
         }
@@ -178,7 +180,7 @@ public class BlockProperties {
     protected static final BlockProps[] blocks = new BlockProps[maxBlocks];
 
     /** Map for the tool properties. */
-    protected static Map<Integer, ToolProps> tools = new LinkedHashMap<Integer, ToolProps>(50, 0.5f);
+    protected static Map<Integer, ToolProps> tools = new LinkedHashMap<>(50, 0.5f);
 
     /** Breaking time for indestructible materials. */
     public static final long indestructible = Long.MAX_VALUE;
@@ -377,11 +379,11 @@ public class BlockProperties {
     /**
      * Map flag to names.
      */
-    private static final Map<Long, String> flagNameMap = new LinkedHashMap<Long, String>();
+    private static final Map<Long, String> flagNameMap = new LinkedHashMap<>();
     /**
      * Map flag name to flag, both names starting with F_... and the name without F_.
      */
-    private static final Map<String, Long> nameFlagMap = new LinkedHashMap<String, Long>();
+    private static final Map<String, Long> nameFlagMap = new LinkedHashMap<>();
 
     private static final Location useLoc = new Location(null, 0, 0, 0);
 
@@ -395,8 +397,7 @@ public class BlockProperties {
                     flagNameMap.put(value, name.substring(2));
                     nameFlagMap.put(name, value);
                     nameFlagMap.put(name.substring(2), value);
-                } catch (IllegalArgumentException e) {
-                } catch (IllegalAccessException e) {
+                } catch (IllegalArgumentException | IllegalAccessException e) {
                 }
             }
         }
@@ -415,7 +416,7 @@ public class BlockProperties {
     public static void init(final MCAccess mcAccess, final WorldConfigProvider<?> worldConfigProvider) {
         blockCache = mcAccess.getBlockCache(null);
         pLoc = new PlayerLocation(mcAccess, null);
-        final Set<String> blocksFeatures = new LinkedHashSet<String>(); // getClass().getName() or some abstract.
+        final Set<String> blocksFeatures = new LinkedHashSet<>(); // getClass().getName() or some abstract.
         try{
             initTools(mcAccess, worldConfigProvider);
             initBlocks(mcAccess, worldConfigProvider);
@@ -798,13 +799,13 @@ public class BlockProperties {
 
     public static void dumpBlocks(boolean all) {
         final LogManager logManager = NCPAPIProvider.getNoCheatPlusAPI().getLogManager();
-        List<String> missing = new LinkedList<String>();
-        List<String> allBlocks = new LinkedList<String>();
+        List<String> missing = new LinkedList<>();
+        List<String> allBlocks = new LinkedList<>();
         if (all) {
             allBlocks.add("[NoCheatPlus] Dump block properties for fastbreak check:");
             allBlocks.add("--- Present entries -------------------------------");
         }
-        List<String> tags = new ArrayList<String>();
+        List<String> tags = new ArrayList<>();
         for (int i = 0; i < blocks.length; i++) {
             String mat;
             try{
@@ -866,7 +867,7 @@ public class BlockProperties {
      * @return
      */
     public static Collection<String> getFlagNames(final Long flags) {
-        final ArrayList<String> tags = new ArrayList<String>(flagNameMap.size());
+        final ArrayList<String> tags = new ArrayList<>(flagNameMap.size());
         if (flags == null) {
             return tags;
         }
@@ -884,7 +885,7 @@ public class BlockProperties {
         final String ucInput = input.trim().toUpperCase();
         final Long flag = nameFlagMap.get(ucInput);
         if (flag != null) {
-            return flag.longValue();
+            return flag;
         }
         try{
             final Long altFlag = Long.parseLong(input);
@@ -960,7 +961,7 @@ public class BlockProperties {
 
     /**
      * Convenience method.
-     * @param blockType
+     * @param BlockType
      * @param player
      * @return
      */
@@ -982,9 +983,10 @@ public class BlockProperties {
 
     /**
      * TODO: repair signature some day (rid of PlayerLocation).
-     * @param BlockId
+     * @param blockId
      * @param itemInHand May be null.
      * @param helmet May be null.
+     * @param player
      * @param location The normal location of a player.
      * @return
      */
@@ -1030,6 +1032,10 @@ public class BlockProperties {
      * Get the normal breaking duration, including enchantments, and tool properties.
      * @param blockId
      * @param itemInHand
+     * @param onGround
+     * @param inWater
+     * @param aquaAffinity
+     * @param haste
      * @return
      */
     public static long getBreakingDuration(final int blockId, final ItemStack itemInHand, final boolean onGround, final boolean inWater, final boolean aquaAffinity, final int haste) {
@@ -1307,12 +1313,10 @@ public class BlockProperties {
      * @return
      */
     public static boolean isInWater(final int blockId) {
-        if (blockId == Material.STATIONARY_WATER.getId() || blockId == Material.STATIONARY_LAVA.getId()) {
-            return true;
-        }
         // TODO: count in water height ?
         // TODO: lava ?
-        return false;
+
+        return blockId == Material.STATIONARY_WATER.getId() || blockId == Material.STATIONARY_LAVA.getId();
     }
 
     /**
@@ -1436,10 +1440,7 @@ public class BlockProperties {
         if ((blockFlags[cache.getTypeId(x, y, z + 1)] & F_SOLID) != 0) {
             return true;
         }
-        if ((blockFlags[cache.getTypeId(x, y, z - 1)] & F_SOLID) != 0) {
-            return true;
-        }
-        return false;
+        return (blockFlags[cache.getTypeId(x, y, z - 1)] & F_SOLID) != 0;
     }
 
     public static final boolean isClimbable(final int id) {
@@ -1569,7 +1570,7 @@ public class BlockProperties {
     /**
      * Test if a position can be passed through (collidesBlock + passable test, no fences yet).<br>
      * NOTE: This is experimental.
-     * @param world
+     * @param access
      * @param x
      * @param y
      * @param z
@@ -1593,13 +1594,7 @@ public class BlockProperties {
         final double fx = x - bx;
         final double fy = y - by;
         final double fz = z - bz;
-        // TODO: Check f_itchy if/once exists.
-        // Check workarounds (blocks with bigger collision box but passable on some spots).
-        if (!isPassableWorkaround(access, bx, by, bz, fx, fy, fz, id, 0, 0, 0, 0)) {
-            // Not passable.
-            return false;
-        }
-        return true;
+        return isPassableWorkaround(access, bx, by, bz, fx, fy, fz, id, 0, 0, 0, 0);
     }
 
     /**
@@ -1608,7 +1603,6 @@ public class BlockProperties {
      * @param x
      * @param y
      * @param z
-     * @param id
      * @return
      */
     public static final boolean isPassableH150(final BlockCache access, final double x, final double y, final double z) {
@@ -1643,6 +1637,7 @@ public class BlockProperties {
      * @param x
      * @param y
      * @param z
+     * @param id
      * @return
      */
     public static final boolean isPassableExact(final BlockCache access, final double x, final double y, final double z, final int id) {
@@ -1773,6 +1768,7 @@ public class BlockProperties {
      * @param dX
      * @param dZ
      * @param dT
+     * @param inset
      * @return False if no collision with the center bounds.
      */
     public static final boolean collidesCenter(final double fx, final double fz, final double dX, final double dZ, final double dT, final double inset) {
@@ -1802,6 +1798,7 @@ public class BlockProperties {
      * @param dX
      * @param dZ
      * @param dT
+     * @param inset
      * @return True if the box is really inside of the center bounds.
      */
     public static final boolean isInsideCenter(final double fx, final double fz, final double dX, final double dZ, final double dT, final double inset) {
@@ -1969,6 +1966,7 @@ public class BlockProperties {
     /**
      * API access to read extra properties from files.
      * @param config
+     * @param pathPrefix
      */
     public static void applyConfig(final RawConfigFile config, final String pathPrefix) {
         // Ignore passable.
@@ -2045,6 +2043,7 @@ public class BlockProperties {
 
     /**
      * Test if the bounding box overlaps with a block of given flags (does not check the blocks bounding box).
+     * @param access
      * @param minX
      * @param minY
      * @param minZ
@@ -2061,6 +2060,7 @@ public class BlockProperties {
 
     /**
      * Test if the bounding box overlaps with a block of given flags (does not check the blocks bounding box).
+     * @param access
      * @param minX
      * @param minY
      * @param minZ
@@ -2085,6 +2085,7 @@ public class BlockProperties {
 
     /**
      * Test if the box collide with any block that matches the flags somehow.
+     * @param access
      * @param minX
      * @param minY
      * @param minZ
@@ -2216,7 +2217,11 @@ public class BlockProperties {
      * @param maxX
      * @param maxY
      * @param maxZ
+     * @param x
+     * @param y
      * @param id
+     * @param z
+     * @return 
      */
     public static final boolean collidesBlock(final BlockCache access, final double minX, double minY, final double minZ, final double maxX, final double maxY, final double maxZ, final int x, final int y, final int z, final int id) {
         // TODO: use internal block data unless delegation wanted?
@@ -2330,13 +2335,9 @@ public class BlockProperties {
         }
         // Hitting the max-edges (if allowed).
         final boolean allowEdge = (flags & F_COLLIDE_EDGES) == 0;
-        if (minX == bmaxX + x && (bmaxX < 1.0 || allowEdge)
+        return !(minX == bmaxX + x && (bmaxX < 1.0 || allowEdge)
                 || minY == bmaxY + y && (bmaxY < 1.0 || allowEdge)
-                || minZ == bmaxZ + z && (bmaxZ < 1.0 || allowEdge)) {
-            return false;
-        }
-        // Collision.
-        return true;
+                || minZ == bmaxZ + z && (bmaxZ < 1.0 || allowEdge));
     }
 
     /**
@@ -2354,11 +2355,11 @@ public class BlockProperties {
 
     /**
      * Attempt to return the exact outside bounds, corrected by flags and other.
+     * @param id
      * @deprecated Not yet for real (only used in certain checks/contexts).
      * @param x
      * @param y
      * @param z
-     * @param typeId
      * @param bounds
      * @return If changed, a copy is returned, otherwise the original array as given.
      */
@@ -2556,8 +2557,6 @@ public class BlockProperties {
                         }
                     }
 
-                    // Not regarded as ground, 
-                    continue;
                 }
             }
         }
@@ -2783,20 +2782,7 @@ public class BlockProperties {
             return true;
         }
 
-        // TODO: Actual ray-collision checking?
-        // TODO: Heuristic workaround for certain situations [might be better outside of this, probably a simplified version ofr the normal case]?
-
-        // Check for workarounds.
-        // TODO: check f_itchy once exists.
-        if (BlockProperties.isPassableWorkaround(access, blockX, blockY, blockZ, oX, oY, oZ, id, dX, dY, dZ, dT)) {
-            return true;
-        }
-        // Does collide (most likely).
-        // TODO: This is not entirely accurate.
-        // TODO: Moving such that the full move rect overlaps, but no real collision (diagonal moves).
-        // TODO: "Wrong" moves through edges of blocks (not sure, needs reproducing).
-        // (Could allow start-end if passable + check first collision time or some estimate.)
-        return false;
+        return BlockProperties.isPassableWorkaround(access, blockX, blockY, blockZ, oX, oY, oZ, id, dX, dY, dZ, dT);
     }
 
 }

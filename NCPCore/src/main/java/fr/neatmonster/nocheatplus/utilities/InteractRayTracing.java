@@ -60,6 +60,7 @@ public class InteractRayTracing extends RayTracing {
 		targetBz = Location.locToBlock(z1);
 	}
 	
+        @Override
 	public boolean collides(){
 		return collides;
 	}
@@ -80,7 +81,7 @@ public class InteractRayTracing extends RayTracing {
 	 * @param blockZ
 	 * @return
 	 */
-	private final boolean doesCollide(int blockX, int blockY, int blockZ){
+	private boolean doesCollide(int blockX, int blockY, int blockZ){
 		final int id = blockCache.getTypeId(blockX, blockY, blockZ);
 		final long flags = BlockProperties.getBlockFlags(id);
 		if ((flags & BlockProperties.F_SOLID) == 0){
@@ -92,8 +93,7 @@ public class InteractRayTracing extends RayTracing {
 			// TODO: F_VARIABLE: Bounding boxes are roughly right ?
 			return false;
 		}
-		if (!blockCache.isFullBounds(blockX, blockY, blockZ)) return false;
-		return true;
+		return blockCache.isFullBounds(blockX, blockY, blockZ);
 	}
 	
 	/**
@@ -103,11 +103,14 @@ public class InteractRayTracing extends RayTracing {
 	 * @param blockZ
 	 * @return
 	 */
-	private final boolean allowsWorkaround(final int blockX, final int blockY, final int blockZ) {
+	private boolean allowsWorkaround(final int blockX, final int blockY, final int blockZ) {
 		// TODO: This allows some bypasses for "strange" setups.
 		// TODO: Consider using distance to target as heuristic ? [should not get smaller !?]
+                @SuppressWarnings("LocalVariableHidesMemberVariable")
 		final int dX = blockX - lastBx;
+                @SuppressWarnings("LocalVariableHidesMemberVariable")
 		final int dY = blockY - lastBy;
+                @SuppressWarnings("LocalVariableHidesMemberVariable")
 		final int dZ = blockZ - lastBz;
 		final double dSq = dX * dX + dY * dY + dZ * dZ;
 		for (int i = 0; i < 6; i++){

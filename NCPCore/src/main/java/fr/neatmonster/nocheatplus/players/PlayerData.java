@@ -63,7 +63,7 @@ public class PlayerData implements IData {
      */
     public void addTag(final String tag) {
         if (tags == null) {
-            tags = new HashSet<String>();
+            tags = new HashSet<>();
         }
         tags.add(tag);
     }

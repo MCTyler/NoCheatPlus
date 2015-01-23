@@ -17,6 +17,7 @@ import fr.neatmonster.nocheatplus.components.ComponentWithName;
 import fr.neatmonster.nocheatplus.event.GenericListener.MethodEntry;
 import fr.neatmonster.nocheatplus.event.GenericListener.MethodEntry.MethodOrder;
 import fr.neatmonster.nocheatplus.logging.StaticLog;
+import java.util.Arrays;
 
 /**
  * This class allows to register event-listeners which will all be called form within one event handler per event+priority combination.<br>
@@ -26,7 +27,7 @@ import fr.neatmonster.nocheatplus.logging.StaticLog;
  */
 public class ListenerManager {
 	
-	protected Map<Class<? extends Event>, EnumMap<EventPriority, GenericListener<?>>> map = new HashMap<Class<? extends Event>, EnumMap<EventPriority,GenericListener<?>>>();
+	protected Map<Class<? extends Event>, EnumMap<EventPriority, GenericListener<?>>> map = new HashMap<>();
 	private final Plugin plugin;
 	private boolean registerDirectly;
 	
@@ -42,6 +43,7 @@ public class ListenerManager {
 	/**
 	 * Probably put to protected later.<br>
 	 * NOTE: Not thread-safe.
+         * @param <E>
 	 * @param clazz
 	 * @param priority
 	 * @return
@@ -49,13 +51,13 @@ public class ListenerManager {
 	public <E extends Event> GenericListener<E> getListener(Class<E> clazz, EventPriority priority){
 		EnumMap<EventPriority, GenericListener<?>> prioMap = map.get(clazz);
 		if (prioMap == null){
-			prioMap = new EnumMap<EventPriority, GenericListener<?>>(EventPriority.class);
+			prioMap = new EnumMap<>(EventPriority.class);
 			map.put(clazz, prioMap);
 		}
 		@SuppressWarnings("unchecked")
 		GenericListener<E> listener = (GenericListener<E>) prioMap.get(priority);
 		if (listener == null){
-			listener = new GenericListener<E>(clazz, priority);
+			listener = new GenericListener<>(clazz, priority);
 			prioMap.put(priority, listener);
 		}
 		if (registerDirectly && !listener.isRegistered()) listener.register(plugin);
@@ -129,13 +131,9 @@ public class ListenerManager {
 			tag = ((ComponentWithName) listener).getComponentName();
 		}
 		Class<?> clazz = listener.getClass();
-		Set<Method> allMethods = new HashSet<Method>();
-		for (Method method : clazz.getMethods()){
-			allMethods.add(method);
-		}
-		for (Method method : clazz.getDeclaredMethods()){
-			allMethods.add(method);
-		}
+		Set<Method> allMethods = new HashSet<>();
+                allMethods.addAll(Arrays.asList(clazz.getMethods()));
+                allMethods.addAll(Arrays.asList(clazz.getDeclaredMethods()));
 		for (Method method : allMethods){
 			EventHandler anno = method.getAnnotation(EventHandler.class);
 			if (anno == null) continue;
@@ -160,6 +158,7 @@ public class ListenerManager {
 			Class<? extends Event> checkedEventType = eventType.asSubclass(Event.class);
 			MethodOrder tempOrder = order;
 			String tempTag = tag;
+                        @SuppressWarnings("ReflectionForUnavailableAnnotation")
 			fr.neatmonster.nocheatplus.event.MethodOrder orderAnno = method.getAnnotation(fr.neatmonster.nocheatplus.event.MethodOrder.class);
 			if (orderAnno != null){
 				MethodOrder veryTempOrder = tempOrder = MethodOrder.getMethodOrder(orderAnno);

@@ -46,7 +46,7 @@ public class NoFall extends Check {
      * @param data
      * @param y
      */
-    private final void handleOnGround(final Player player, final double y, final boolean reallyOnGround, final MovingData data, final MovingConfig cc) {
+    private void handleOnGround(final Player player, final double y, final boolean reallyOnGround, final MovingData data, final MovingConfig cc) {
         //        final int pD = getDamage(mcPlayer.fallDistance);
         //        final int nfD = getDamage(data.noFallFallDistance);
         //        final int yD = getDamage((float) (data.noFallMaxY - y));
@@ -65,7 +65,7 @@ public class NoFall extends Check {
         else data.clearNoFallData();
     }
 
-    private final void adjustFallDistance(final Player player, final double minY, final boolean reallyOnGround, final MovingData data, final MovingConfig cc) {
+    private void adjustFallDistance(final Player player, final double minY, final boolean reallyOnGround, final MovingData data, final MovingConfig cc) {
         final float noFallFallDistance = Math.max(data.noFallFallDistance, (float) (data.noFallMaxY - minY));
         if (noFallFallDistance >= 3.0){
             final float fallDistance = player.getFallDistance();
@@ -102,10 +102,13 @@ public class NoFall extends Check {
      * 
      * @param player
      *            the player
+     * @param loc
      * @param from
      *            the from
      * @param to
      *            the to
+     * @param data
+     * @param cc
      */
     public void check(final Player player, final Location loc, final PlayerLocation from, final PlayerLocation to, final MovingData data, final MovingConfig cc) {
 
@@ -243,6 +246,7 @@ public class NoFall extends Check {
      * This is called if a player fails a check and gets set back, to avoid using that to avoid fall damage the player might be dealt damage here. 
      * @param player
      * @param data
+     * @param y
      */
     public void checkDamage(final Player player, final MovingData data, final double y) {
         final MovingConfig cc = MovingConfig.getConfig(player);

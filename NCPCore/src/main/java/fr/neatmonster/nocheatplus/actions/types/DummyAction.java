@@ -8,6 +8,8 @@ import fr.neatmonster.nocheatplus.config.ConfigFileWithActions;
 /**
  * If an action can't be parsed correctly, at least keep it stored in this form to not lose it when loading/storing the
  * configuration file.
+ * @param <D>
+ * @param <L>
  */
 public class DummyAction<D extends ActionData, L extends AbstractActionList<D, L>> extends Action<D, L> {
     /** The original string used for this action definition. */

@@ -111,7 +111,7 @@ public interface NoCheatPlusAPI extends ComponentRegistry<Object>, ComponentRegi
     /**
      * Check if a player is denied to login at a certain point of time.
      * @param playerName
-     * @param currentTimeMillis
+     * @param time
      * @return
      */
     public boolean isLoginDenied(String playerName, long time);

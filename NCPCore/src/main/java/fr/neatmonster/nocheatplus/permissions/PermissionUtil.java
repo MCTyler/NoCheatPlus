@@ -96,8 +96,9 @@ public class PermissionUtil {
      * @param permissionMessage
      * @return
      */
+    @SuppressWarnings("null")
     public static List<CommandProtectionEntry> protectCommands(final String permissionBase, final Collection<String> ignoredCommands, final boolean invertIgnored, final boolean ops, final String permissionMessage) {
-        final Set<String> checked = new HashSet<String>();
+        final Set<String> checked = new HashSet<>();
         for (String label : ignoredCommands) {
             checked.add(CommandUtil.getCommandLabel(label, false));
         }
@@ -107,7 +108,7 @@ public class PermissionUtil {
             rootPerm = new Permission(permissionBase);
             pm.addPermission(rootPerm);
         }
-        final List<CommandProtectionEntry> changed = new LinkedList<CommandProtectionEntry>();
+        final List<CommandProtectionEntry> changed = new LinkedList<>();
         // Apply protection based on white-list or black-list.
         for (final Command command : CommandUtil.getCommands()) {
             final String lcLabel = command.getLabel().trim().toLowerCase();
@@ -163,7 +164,7 @@ public class PermissionUtil {
      * @param command
      * @return
      */
-    private static final boolean containsAnyAliases(final Set<String> checked, final Command command) {
+    private static boolean containsAnyAliases(final Set<String> checked, final Command command) {
         final Collection<String> aliases = command.getAliases();
         if (aliases != null) {
             for (final String alias : aliases) {
@@ -179,6 +180,7 @@ public class PermissionUtil {
      * Set a permission as child for all the other permissions given in a Collection.
      * @param permissions Not expected to exist.
      * @param childPermissionName
+     * @param permissionDefault
      */
     public static void addChildPermission(final Collection<String> permissions, final String childPermissionName, final PermissionDefault permissionDefault) {
         final PluginManager pm = Bukkit.getPluginManager();

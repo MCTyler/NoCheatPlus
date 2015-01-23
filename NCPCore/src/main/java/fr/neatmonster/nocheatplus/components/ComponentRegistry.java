@@ -6,6 +6,7 @@ package fr.neatmonster.nocheatplus.components;
  * <li>Implementations should somehow specify what components can be registered.</li>
  * <li>Implementations should somehow specify if/when they are unregistered automatically.</li>
  * @author mc_dev
+ * @param <T>
  *
  */
 public interface ComponentRegistry<T>{

@@ -9,6 +9,7 @@ import fr.neatmonster.nocheatplus.checks.CheckType;
 /**
  * Quick and dirty way to add factories for sub checks for more precise data removal from a more general data object.
  * @author mc_dev
+ * @param <D>
  *
  */
 public abstract class SubCheckDataFactory<D extends ICheckData> implements CheckDataFactory {
